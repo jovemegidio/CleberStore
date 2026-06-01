@@ -1,5 +1,5 @@
 ﻿/* ========================================
-   Cleber Store - CHECKOUT JS (WhatsApp)
+   Filho e Pai - CHECKOUT JS (WhatsApp)
    Fluxo: Revisão → Cadastro → Endereço → WhatsApp
    ======================================== */
 document.addEventListener('DOMContentLoaded', () => {
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch { return {}; }
     })();
 
-    const waNumber = (siteSettings.store?.whatsapp || '5511954555972').replace(/\D/g, '');
+    const waNumber = (siteSettings.store?.whatsapp || '5511984270638').replace(/\D/g, '');
     const pixDiscount = siteSettings.shipping?.pixDiscount ?? 5;
 
     const fmt = (v) => `R$ ${v.toFixed(2).replace('.', ',')}`;
@@ -374,7 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const pixTotal = total * (1 - pixDiscount / 100);
 
         // Build WhatsApp message
-        let msg = `🛒 *PEDIDO Cleber Store*\n`;
+        let msg = `🛒 *PEDIDO Filho e Pai*\n`;
         msg += `━━━━━━━━━━━━━━━━━━\n\n`;
 
         cartItems.forEach((item, i) => {

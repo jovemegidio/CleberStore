@@ -1,5 +1,5 @@
 ﻿/* ========================================
-   Cleber Store - ADMIN PANEL JAVASCRIPT
+   Filho e Pai - ADMIN PANEL JAVASCRIPT
    Full CRUD with localStorage persistence
    ======================================== */
 
@@ -21,9 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    const DATA_VERSION = 'cs_v1';
+    const DATA_VERSION = 'fp_v1';
 
-    // Default products — Tênis importados Cleber Store
+    // Default products — Tênis importados Filho e Pai
     const DEFAULT_PRODUCTS = [
         { id: 1,  name: 'Air Max Plus TN 1 x Lacoste',        category: 'Tênis Nike',     price: 309.00, originalPrice: 349.00, image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 38 },
         { id: 2,  name: 'Air Max Plus TN 1 "Celestine Blue"',  category: 'Tênis Nike',     price: 309.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1514989940723-e8e51635b782?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 27 },
@@ -51,7 +51,18 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 24, name: 'Asics Gel-Kayano 14',                 category: 'Asics & Mizuno', price: 359.00, originalPrice: 399.00, image: 'https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 18 },
         { id: 25, name: 'Asics Gel-Nimbus 25',                 category: 'Asics & Mizuno', price: 379.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1584735175315-9d5df23be91b?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 14 },
         { id: 26, name: 'Mizuno Wave Prophecy',                category: 'Asics & Mizuno', price: 379.00, originalPrice: 429.00, image: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 11 },
-        { id: 27, name: 'Mizuno Wave Creation',                category: 'Asics & Mizuno', price: 349.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 9 }
+        { id: 27, name: 'Mizuno Wave Creation',                category: 'Asics & Mizuno', price: 349.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 9  },
+        { id: 28, name: 'Air Max 90 "Triple White"',           category: 'Tênis Nike',     price: 319.00, originalPrice: 359.00, image: 'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 43 },
+        { id: 29, name: 'Air Max 90 "Triple Black"',           category: 'Tênis Nike',     price: 319.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1556906781-9a414961a183?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 37 },
+        { id: 30, name: 'Air Max 90 "Infrared"',               category: 'Tênis Nike',     price: 319.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 29 },
+        { id: 31, name: 'Air Max DN8 "Triple Black"',          category: 'Tênis Nike',     price: 329.00, originalPrice: 369.00, image: 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 26 },
+        { id: 32, name: 'Air Max DN8 "Light Blue"',            category: 'Tênis Nike',     price: 329.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1514989940723-e8e51635b782?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 18 },
+        { id: 33, name: 'Jordan 3 "Black Cement"',             category: 'Jordan',         price: 399.00, originalPrice: 449.00, image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 35 },
+        { id: 34, name: 'Jordan 3 "Fire Red"',                 category: 'Jordan',         price: 399.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 28 },
+        { id: 35, name: 'Jordan 11 "Space Jam"',               category: 'Jordan',         price: 449.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 57 },
+        { id: 36, name: 'Jordan 1 Low "Black Toe"',            category: 'Jordan',         price: 379.00, originalPrice: 419.00, image: 'https://images.unsplash.com/photo-1556906781-9a414961a183?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 32 },
+        { id: 37, name: 'Nocta x Nike Glide "Black"',          category: 'Colabs',         price: 349.00, originalPrice: 389.00, image: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 24 },
+        { id: 38, name: 'Skepta x Nike Tailwind V',            category: 'Colabs',         price: 349.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 16 }
     ];
 
     const DEFAULT_REVIEWS = [
@@ -84,12 +95,12 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const DEFAULT_PAGES = [
-        { id: 'sobre-nos',    name: 'Sobre Nós',            file: 'sobre-nos.html',              updated: '2026-05-31', editableContent: '<p>A <strong>Cleber Store</strong> é especializada em tênis importados de alta qualidade: Nike Air Max TN, Air Force 1, Jordan, Asics e Mizuno. Importados diretamente com acabamento premium.</p>' },
+        { id: 'sobre-nos',    name: 'Sobre Nós',            file: 'sobre-nos.html',              updated: '2026-05-31', editableContent: '<p>A <strong>Filho e Pai</strong> é especializada em tênis importados de alta qualidade: Nike Air Max TN, Air Force 1, Jordan, Asics e Mizuno. Importados diretamente com acabamento premium.</p>' },
         { id: 'faq',          name: 'Perguntas Frequentes', file: 'perguntas-frequentes.html',   updated: '2026-05-31', editableContent: '' },
         { id: 'rastreamento', name: 'Rastrear Pedido',      file: 'rastreamento.html',           updated: '2026-05-31', editableContent: '' }
     ];
 
-    // Data migration: reset to new Cleber Store defaults on first load
+    // Data migration: reset to Filho e Pai defaults on first load
     if (DB.get('dataVersion', '') !== DATA_VERSION) {
         DB.set('products',    DEFAULT_PRODUCTS);
         DB.set('reviews',     DEFAULT_REVIEWS);
@@ -309,6 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <option ${category === 'Air Force 1'    ? 'selected' : ''}>Air Force 1</option>
                         <option ${category === 'Jordan'         ? 'selected' : ''}>Jordan</option>
                         <option ${category === 'Asics & Mizuno' ? 'selected' : ''}>Asics & Mizuno</option>
+                        <option ${category === 'Colabs'         ? 'selected' : ''}>Colabs</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -1137,12 +1149,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     const DEFAULT_SETTINGS = {
         store: {
-            name: 'Cleber Store',
+            name: 'Filho e Pai',
             slogan: 'A Elite das Camisas de Futebol',
             cnpj: 'XX.XXX.XXX/0001-XX',
             email: 'bruno.teles2@icloud.com',
-            whatsapp: '5511954555972',
-            instagram: '@cleberstore'
+            whatsapp: '5511984270638',
+            instagram: '@filhoepai'
         },
         shipping: {
             freeShipping: 299.90,
@@ -1369,5 +1381,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderAll();
 
-    console.log('⚙️ Cleber Store Admin Panel - Loaded');
+    console.log('⚙️ Filho e Pai Admin Panel - Loaded');
 });

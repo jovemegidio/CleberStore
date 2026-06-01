@@ -1,5 +1,5 @@
 ﻿/* ========================================
-   Cleber Store - PRODUCT DETAIL PAGE JS
+   Filho e Pai - PRODUCT DETAIL PAGE JS
    ======================================== */
 document.addEventListener('DOMContentLoaded', () => {
     'use strict';
@@ -14,33 +14,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const pixDiscount = siteSettings.shipping?.pixDiscount ?? 5;
     const maxInstallments = siteSettings.shipping?.maxInstallments ?? 2;
-    const waNumber = (siteSettings.store?.whatsapp || '5511954555972').replace(/\D/g, '');
+    const waNumber = (siteSettings.store?.whatsapp || '5511984270638').replace(/\D/g, '');
 
-    // Products database (same as admin)
-    const PRODUCTS = JSON.parse(localStorage.getItem('b10_products')) || [
-        { id: 1, name: 'Arsenal FC 2024/2025', category: 'Clubes Europeus', price: 138.70, originalPrice: 158.80, image: 'https://cdn.offstoreimages.me/compressed/d826d0d5154eb8aa21be0e1d2c1a58de.webp', status: 'active', sales: 24 },
-        { id: 2, name: 'Inter de Milão 2024/2025', category: 'Clubes Europeus', price: 159.80, originalPrice: 0, image: 'https://cdn.offstoreimages.me/compressed/2ee05aa1c0cf71ac3ad55ee855121ee4.webp', status: 'active', sales: 18 },
-        { id: 3, name: 'Liverpool FC 2025/2026', category: 'Clubes Europeus', price: 138.70, originalPrice: 159.80, image: 'https://cdn.offstoreimages.me/compressed/52b04e3691d3baa1e6a018668aeba9b3.webp', status: 'active', sales: 31 },
-        { id: 4, name: 'Arsenal 2023/2024', category: 'Clubes Europeus', price: 159.80, originalPrice: 0, image: 'https://cdn.offstoreimages.me/compressed/460dbbff0abe2ad4020af59e2c6fc0e5.webp', status: 'active', sales: 22 },
-        { id: 5, name: 'Chelsea FC Total 90 (T90)', category: 'Clubes Europeus', price: 159.80, originalPrice: 0, image: 'https://cdn.offstoreimages.me/compressed/615eb85002d84b375506011e607e4fa7.webp', status: 'active', sales: 27 },
-        { id: 6, name: 'Seleção Brasileira 2004', category: 'Seleções', price: 198.70, originalPrice: 0, image: 'https://cdn.offstoreimages.me/compressed/5645acdbf278a6c4580c36788b729a0e.webp', status: 'active', sales: 45 },
-        { id: 7, name: 'Juventus 2024/2025', category: 'Clubes Europeus', price: 139.80, originalPrice: 159.80, image: 'https://cdn.offstoreimages.me/compressed/328506c96ac799cc4b2a6d0081883454.webp', status: 'active', sales: 17 },
-        { id: 8, name: 'Portugal Seleção', category: 'Seleções', price: 168.70, originalPrice: 0, image: 'https://cdn.offstoreimages.me/compressed/4fe275c773e4982829ee870243222b30.webp', status: 'active', sales: 19 },
-        { id: 9, name: 'México Seleção', category: 'Seleções', price: 168.70, originalPrice: 0, image: 'https://cdn.offstoreimages.me/compressed/f5f398930df3847d5017cf80ddb23c4a.webp', status: 'active', sales: 14 },
-        { id: 10, name: 'México Seleção Away', category: 'Seleções', price: 168.70, originalPrice: 0, image: 'https://cdn.offstoreimages.me/compressed/2bc54bb3b8ceb9d2f3de33a7c305db5f.webp', status: 'active', sales: 16 },
-        { id: 11, name: 'Tottenham Hotspur', category: 'Clubes Europeus', price: 159.80, originalPrice: 0, image: 'https://cdn.offstoreimages.me/compressed/56bae4931fa3c56494ee2702b5d12a82.webp', status: 'active', sales: 12 },
-        { id: 12, name: 'Itália Seleção', category: 'Seleções', price: 159.80, originalPrice: 0, image: 'https://cdn.offstoreimages.me/compressed/7363172c8f5f13b9e54eb2ea61fac015.webp', status: 'active', sales: 29 },
-        { id: 13, name: 'Portugal Seleção Away', category: 'Seleções', price: 159.80, originalPrice: 179.80, image: 'https://cdn.offstoreimages.me/compressed/29d9425563a0d980eb463532433ef026.webp', status: 'active', sales: 26 },
-        { id: 14, name: 'Itália Seleção Away', category: 'Seleções', price: 159.80, originalPrice: 0, image: 'https://cdn.offstoreimages.me/compressed/42a343b967f65bbd9f8d87769e2071d8.webp', status: 'active', sales: 21 },
-        { id: 15, name: 'Nike Mercurial 2025', category: 'Tênis', price: 249.90, originalPrice: 299.90, image: 'https://images.unsplash.com/photo-1528701800489-20d9c8f02bae?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 35 },
-        { id: 16, name: 'Adidas Predator Pro', category: 'Tênis', price: 269.90, originalPrice: 329.90, image: 'https://images.unsplash.com/photo-1528701800484-1544cb97ef8e?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 28 }
+    const DATA_VERSION = 'fp_v1';
+    const hasNewData = localStorage.getItem('b10_dataVersion') === DATA_VERSION;
+
+    const DEFAULT_PRODUCTS = [
+        { id: 1,  name: 'Air Max Plus TN 1 x Lacoste',        category: 'Tênis Nike',     price: 309.00, originalPrice: 349.00, image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 38 },
+        { id: 2,  name: 'Air Max Plus TN 1 "Celestine Blue"',  category: 'Tênis Nike',     price: 309.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1514989940723-e8e51635b782?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 27 },
+        { id: 3,  name: 'Air Max Plus TN 1 "Wild Grape"',      category: 'Tênis Nike',     price: 309.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 21 },
+        { id: 4,  name: 'Air Max Plus TN 3 "Obsidian"',        category: 'Tênis Nike',     price: 349.00, originalPrice: 389.00, image: 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 44 },
+        { id: 5,  name: 'Air Max Plus TN 3 "White Black"',     category: 'Tênis Nike',     price: 349.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 33 },
+        { id: 6,  name: 'Air Max Plus TN 3 "Track Red"',       category: 'Tênis Nike',     price: 349.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 28 },
+        { id: 7,  name: 'Air Max Plus TN 3 "Triple Black"',    category: 'Tênis Nike',     price: 349.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1556906781-9a414961a183?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 51 },
+        { id: 8,  name: 'Air Max Plus TN 3 "Laser Blue"',      category: 'Tênis Nike',     price: 349.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1543508282-6319a3e2621f?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 19 },
+        { id: 9,  name: 'Air Max 95 "Dark Grey"',              category: 'Tênis Nike',     price: 379.00, originalPrice: 429.00, image: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 23 },
+        { id: 10, name: 'Air Max 95 "Triple White"',           category: 'Tênis Nike',     price: 379.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 31 },
+        { id: 11, name: 'Air Max 95 "Triple Black"',           category: 'Tênis Nike',     price: 379.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1556906781-9a414961a183?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 42 },
+        { id: 12, name: 'Air Max 95 "Crystal Blue"',           category: 'Tênis Nike',     price: 379.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1514989940723-e8e51635b782?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 17 },
+        { id: 13, name: 'Air Max 95 "Neon"',                   category: 'Tênis Nike',     price: 379.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 25 },
+        { id: 14, name: 'Air Max 95 "Grey Red"',               category: 'Tênis Nike',     price: 379.00, originalPrice: 429.00, image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 15 },
+        { id: 15, name: 'Air Force 1 Low "Triple White"',      category: 'Air Force 1',    price: 369.00, originalPrice: 409.00, image: 'https://images.unsplash.com/photo-1579338559194-a162d19bf842?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 56 },
+        { id: 16, name: 'Air Force 1 Low "Triple Black"',      category: 'Air Force 1',    price: 369.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1556906781-9a414961a183?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 47 },
+        { id: 17, name: 'Air Force 1 Mid "White"',             category: 'Air Force 1',    price: 389.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 34 },
+        { id: 18, name: 'Air Max DN "Triple Black"',           category: 'Tênis Nike',     price: 329.00, originalPrice: 369.00, image: 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 34 },
+        { id: 19, name: 'Air Max DN "White Volt"',             category: 'Tênis Nike',     price: 329.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1543508282-6319a3e2621f?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 22 },
+        { id: 20, name: 'Jordan 4 "Red Thunder"',              category: 'Jordan',         price: 450.00, originalPrice: 499.00, image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 48 },
+        { id: 21, name: 'Jordan 4 "Military Blue"',            category: 'Jordan',         price: 450.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 39 },
+        { id: 22, name: 'Jordan 11 "Bred"',                    category: 'Jordan',         price: 439.00, originalPrice: 489.00, image: 'https://images.unsplash.com/photo-1556906781-9a414961a183?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 62 },
+        { id: 23, name: 'Jordan 1 Low "Grey Toe"',             category: 'Jordan',         price: 379.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 29 },
+        { id: 24, name: 'Asics Gel-Kayano 14',                 category: 'Asics & Mizuno', price: 399.00, originalPrice: 449.00, image: 'https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 18 },
+        { id: 25, name: 'Asics Gel-Nimbus 25',                 category: 'Asics & Mizuno', price: 399.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1584735175315-9d5df23be91b?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 14 },
+        { id: 26, name: 'Mizuno Wave Prophecy',                category: 'Asics & Mizuno', price: 379.00, originalPrice: 429.00, image: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 11 },
+        { id: 27, name: 'Mizuno Wave Creation',                category: 'Asics & Mizuno', price: 349.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 9  },
+        { id: 28, name: 'Air Max 90 "Triple White"',           category: 'Tênis Nike',     price: 319.00, originalPrice: 359.00, image: 'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 43 },
+        { id: 29, name: 'Air Max 90 "Triple Black"',           category: 'Tênis Nike',     price: 319.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1556906781-9a414961a183?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 37 },
+        { id: 30, name: 'Air Max 90 "Infrared"',               category: 'Tênis Nike',     price: 319.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 29 },
+        { id: 31, name: 'Air Max DN8 "Triple Black"',          category: 'Tênis Nike',     price: 329.00, originalPrice: 369.00, image: 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 26 },
+        { id: 32, name: 'Air Max DN8 "Light Blue"',            category: 'Tênis Nike',     price: 329.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1514989940723-e8e51635b782?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 18 },
+        { id: 33, name: 'Jordan 3 "Black Cement"',             category: 'Jordan',         price: 399.00, originalPrice: 449.00, image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 35 },
+        { id: 34, name: 'Jordan 3 "Fire Red"',                 category: 'Jordan',         price: 399.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 28 },
+        { id: 35, name: 'Jordan 11 "Space Jam"',               category: 'Jordan',         price: 439.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 57 },
+        { id: 36, name: 'Jordan 1 Low "Black Toe"',            category: 'Jordan',         price: 379.00, originalPrice: 419.00, image: 'https://images.unsplash.com/photo-1556906781-9a414961a183?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 32 },
+        { id: 37, name: 'Nocta x Nike Glide "Black"',          category: 'Colabs',         price: 349.00, originalPrice: 389.00, image: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 24 },
+        { id: 38, name: 'Skepta x Nike Tailwind V',            category: 'Colabs',         price: 349.00, originalPrice: 0,      image: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 16 }
     ];
 
-    const REVIEWS = JSON.parse(localStorage.getItem('b10_reviews')) || [
-        { id: 1, author: 'Rafael C.', location: 'São Paulo, SP', initials: 'RC', stars: 5, text: 'Qualidade absurda! Não consegui diferenciar da original.', product: 'Arsenal FC 2024/2025', date: '2026-02-06' },
-        { id: 2, author: 'Mariana S.', location: 'Rio de Janeiro, RJ', initials: 'MS', stars: 5, text: 'Entrega rápida e o atendimento foi sensacional.', product: 'Liverpool FC 2025/2026', date: '2026-02-04' },
-        { id: 3, author: 'Lucas P.', location: 'Belo Horizonte, MG', initials: 'LP', stars: 5, text: 'Melhor custo-benefício. Qualidade 1:1 de verdade.', product: 'Seleção Brasileira 2004', date: '2026-02-02' }
+    const storedProducts = (() => { try { const d = localStorage.getItem('b10_products'); return d ? JSON.parse(d) : null; } catch { return null; } })();
+    const PRODUCTS = (hasNewData && storedProducts) ? storedProducts : DEFAULT_PRODUCTS;
+
+    const DEFAULT_REVIEWS = [
+        { id: 1, author: 'Rafael C.',  location: 'São Paulo, SP',       initials: 'RC', stars: 5,   text: 'Qualidade absurda! O TN 3 chegou idêntico, acabamento impecável. Super recomendo!',       product: 'Air Max Plus TN 3 "Triple Black"', date: '2026-05-20' },
+        { id: 2, author: 'Mariana S.', location: 'Rio de Janeiro, RJ',  initials: 'MS', stars: 5,   text: 'Entrega super rápida e o atendimento pelo WhatsApp foi incrível. O AF1 chegou perfeito!', product: 'Air Force 1 Low "Triple White"',    date: '2026-05-15' },
+        { id: 3, author: 'Lucas P.',   location: 'Belo Horizonte, MG',  initials: 'LP', stars: 4.5, text: 'Melhor custo-benefício. Jordan 4 material premium, já comprei 2 pares!',                 product: 'Jordan 4 "Red Thunder"',           date: '2026-05-10' }
     ];
+    const storedReviews = (() => { try { const d = localStorage.getItem('b10_reviews'); return d ? JSON.parse(d) : null; } catch { return null; } })();
+    const REVIEWS = (hasNewData && storedReviews) ? storedReviews : DEFAULT_REVIEWS;
 
     // Get product from URL
     const params = new URLSearchParams(window.location.search);
@@ -52,13 +81,13 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    let selectedSize = 'M';
+    let selectedSize = '41';
     let quantity = 1;
 
     // Fill page
-    document.title = `${product.name} | Cleber Store`;
-    const productType = product.category === 'Tênis' ? 'Tênis esportivo premium' : 'Camisa tailandesa 1:1 premium';
-    document.querySelector('meta[name="description"]')?.setAttribute('content', `${product.name} - ${productType}. R$ ${product.price.toFixed(2).replace('.', ',')}. Compre na Cleber Store.`);
+    document.title = `${product.name} | Filho e Pai`;
+    const productType = 'Tênis importado premium';
+    document.querySelector('meta[name="description"]')?.setAttribute('content', `${product.name} - ${productType}. R$ ${product.price.toFixed(2).replace('.', ',')}. Compre na Filho e Pai.`);
 
     const fmt = (v) => `R$ ${v.toFixed(2).replace('.', ',')}`;
     const pdpName = document.getElementById('pdpName');

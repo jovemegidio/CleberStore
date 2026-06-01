@@ -1,5 +1,5 @@
 ﻿/* ========================================
-   Cleber Store - ADVANCED JAVASCRIPT
+   Filho e Pai - ADVANCED JAVASCRIPT
    Professional UX & Interactions
    ======================================== */
 
@@ -17,9 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
     })();
 
     const storeConfig = {
-        whatsapp: siteSettings.store?.whatsapp || '5511954555972',
-        instagram: siteSettings.store?.instagram || '@cleberstore',
-        name: siteSettings.store?.name || 'Cleber Store',
+        whatsapp: siteSettings.store?.whatsapp || '5511984270638',
+        instagram: siteSettings.store?.instagram || '@filhoepai',
+        name: siteSettings.store?.name || 'Filho e Pai',
         email: siteSettings.store?.email || 'bruno.teles2@icloud.com'
     };
 
@@ -597,7 +597,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const total = subtotal - discount;
             const pixTotal = total * (1 - shippingConfig.pixDiscount / 100);
 
-            let msg = `🛒 *PEDIDO Cleber Store*\n`;
+            let msg = `🛒 *PEDIDO Filho e Pai*\n`;
             msg += `━━━━━━━━━━━━━━━━━━\n\n`;
             items.forEach((item, i) => {
                 const unitVal = typeof item.price === 'number' ? item.price : parseFloat(String(item.price).replace('R$','').replace(/\./g,'').replace(',','.').trim()) || 0;
@@ -956,5 +956,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    console.log('🏆 Cleber Store - Site carregado com sucesso!');
+    console.log('🏆 Filho e Pai - Site carregado com sucesso!');
 });

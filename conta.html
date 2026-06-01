@@ -1,0 +1,650 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Conta | Filho e Pai</title>
+    <meta name="description" content="Acesse sua conta na Filho e Pai. Gerencie pedidos, endereços e favoritos.">
+    <link rel="stylesheet" href="styles.css?v=20260601v1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <meta name="theme-color" content="#111">
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        .conta-wrapper { min-height: 80vh; padding: 40px 0 60px; background: #f5f5f5; }
+
+        /* ── AUTH CARD ── */
+        .auth-card { max-width: 480px; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 4px 32px rgba(0,0,0,.1); overflow: hidden; }
+        .auth-tabs { display: flex; border-bottom: 2px solid #f0f0f0; }
+        .auth-tab { flex: 1; padding: 18px; font-size: 15px; font-weight: 700; text-align: center; cursor: pointer; color: #64748b; border: none; background: none; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all .2s; }
+        .auth-tab.active { color: var(--accent, #0057b8); border-bottom-color: var(--accent, #0057b8); }
+        .auth-form-panel { padding: 32px 36px; display: none; }
+        .auth-form-panel.active { display: block; }
+        .auth-form-panel h2 { font-size: 22px; font-weight: 800; color: #111; margin: 0 0 6px; }
+        .auth-form-panel p.auth-sub { font-size: 14px; color: #64748b; margin: 0 0 24px; }
+        .auth-form .form-group { margin-bottom: 16px; }
+        .auth-form .form-group label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+        .auth-form .form-group input { width: 100%; padding: 12px 14px 12px 40px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 14px; font-family: inherit; color: #111; background: #f9fafb; box-sizing: border-box; transition: border-color .2s; outline: none; }
+        .auth-form .form-group input:focus { border-color: var(--accent, #0057b8); background: #fff; }
+        .auth-form .form-group .input-wrap { position: relative; }
+        .auth-form .form-group .input-wrap i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 15px; pointer-events: none; }
+        .auth-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .btn-auth { width: 100%; padding: 14px; background: var(--accent, #0057b8); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background .2s; }
+        .btn-auth:hover { background: #003f8e; }
+        .auth-divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: #94a3b8; font-size: 13px; }
+        .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: #e2e8f0; }
+
+        /* ── GOOGLE BUTTON ── */
+        .btn-google { width: 100%; padding: 13px 16px; background: #fff; color: #3c4043; border: 2px solid #dadce0; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; transition: background .2s, box-shadow .2s; font-family: inherit; }
+        .btn-google:hover { background: #f8f9fa; box-shadow: 0 1px 6px rgba(60,64,67,.2); }
+        .btn-google svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+        /* ── MESSAGES ── */
+        .auth-error { background: #fee2e2; color: #b91c1c; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: none; }
+        .auth-error.show { display: flex; align-items: center; gap: 8px; }
+        .auth-success { background: #dcfce7; color: #166534; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: none; }
+        .auth-success.show { display: flex; align-items: center; gap: 8px; }
+        .terms-check { display: flex; align-items: flex-start; gap: 8px; margin-top: 8px; }
+        .terms-check input { width: auto; margin-top: 2px; }
+        .terms-check label { font-size: 12px; color: #64748b; font-weight: 400; }
+        .terms-check a { color: var(--accent, #0057b8); }
+
+        /* ── PROFILE ── */
+        .profile-wrapper { display: none; }
+        .profile-header-card { background: linear-gradient(135deg, #0057b8, #003f8e); border-radius: 20px; padding: 28px 32px; color: #fff; display: flex; align-items: center; gap: 20px; margin-bottom: 24px; }
+        .profile-avatar { width: 72px; height: 72px; border-radius: 50%; background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 800; flex-shrink: 0; border: 3px solid rgba(255,255,255,.4); overflow: hidden; }
+        .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-header-info h2 { margin: 0 0 4px; font-size: 22px; font-weight: 800; }
+        .profile-header-info p { margin: 0; opacity: .8; font-size: 14px; }
+        .profile-stats { display: flex; gap: 16px; margin-top: 12px; }
+        .profile-stat { background: rgba(255,255,255,.15); border-radius: 10px; padding: 8px 16px; text-align: center; }
+        .profile-stat strong { display: block; font-size: 18px; font-weight: 800; }
+        .profile-stat span { font-size: 11px; opacity: .8; }
+        .profile-nav { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+        .profile-nav-btn { padding: 10px 18px; border: 2px solid #e2e8f0; background: #fff; border-radius: 10px; font-size: 13px; font-weight: 600; color: #64748b; cursor: pointer; transition: all .2s; }
+        .profile-nav-btn.active, .profile-nav-btn:hover { border-color: var(--accent, #0057b8); color: var(--accent, #0057b8); background: #eff6ff; }
+        .profile-section { display: none; }
+        .profile-section.active { display: block; }
+        .profile-card { background: #fff; border-radius: 16px; padding: 24px 28px; box-shadow: 0 2px 12px rgba(0,0,0,.06); margin-bottom: 16px; }
+        .profile-card h3 { font-size: 15px; font-weight: 700; color: #1e293b; margin: 0 0 16px; display: flex; align-items: center; gap: 8px; }
+        .profile-card h3 i { color: var(--accent, #0057b8); }
+        .profile-form .form-group { margin-bottom: 14px; }
+        .profile-form label { display: block; font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 5px; text-transform: uppercase; letter-spacing: .5px; }
+        .profile-form input { width: 100%; padding: 10px 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; font-family: inherit; color: #111; box-sizing: border-box; transition: border-color .2s; outline: none; }
+        .profile-form input:focus { border-color: var(--accent, #0057b8); }
+        .profile-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .btn-save { padding: 11px 24px; background: var(--accent, #0057b8); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; margin-top: 8px; }
+        .btn-save:hover { background: #003f8e; }
+        .btn-logout { padding: 10px 20px; background: none; border: 2px solid #e2e8f0; border-radius: 8px; color: #64748b; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+        .btn-logout:hover { border-color: #dc2626; color: #dc2626; }
+        .order-card { border: 2px solid #e2e8f0; border-radius: 12px; overflow: hidden; margin-bottom: 12px; }
+        .order-header { padding: 14px 16px; background: #f8fafc; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; }
+        .order-status { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+        .order-status.delivered { background: #dcfce7; color: #166534; }
+        .order-status.shipped { background: #dbeafe; color: #1e40af; }
+        .order-status.pending { background: #fef9c3; color: #854d0e; }
+        .empty-state { text-align: center; padding: 40px 20px; color: #64748b; }
+        .empty-state i { font-size: 48px; opacity: .3; margin-bottom: 12px; display: block; }
+
+        /* ── BENEFITS ── */
+        .auth-benefits { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; max-width: 480px; margin: 24px auto 0; }
+        .benefit-item { background: #fff; border-radius: 14px; padding: 16px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+        .benefit-item i { font-size: 24px; color: var(--accent, #0057b8); margin-bottom: 6px; display: block; }
+        .benefit-item strong { font-size: 12px; color: #1e293b; display: block; }
+        .benefit-item span { font-size: 11px; color: #64748b; }
+
+        @media (max-width: 600px) {
+            .auth-card { margin: 0 12px; }
+            .auth-form-panel { padding: 24px 20px; }
+            .auth-form .form-row { grid-template-columns: 1fr; }
+            .profile-header-card { flex-direction: column; text-align: center; padding: 20px; }
+            .profile-stats { justify-content: center; }
+            .profile-form .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- TOP BAR -->
+    <div class="top-bar"><div class="container top-bar-content"><div class="top-bar-left"><span><i class="fas fa-truck"></i> Frete grátis acima de R$ 299,90</span><span class="top-bar-divider">|</span><span><i class="fas fa-shield-alt"></i> Compra 100% segura</span><span class="top-bar-divider">|</span><span><i class="fab fa-pix"></i> 5% OFF no PIX</span></div><div class="top-bar-right"><a href="https://wa.me/5511984270638" target="_blank"><i class="fab fa-whatsapp"></i> (11) 98427-0638</a><span class="top-bar-divider">|</span><a href="https://www.instagram.com/filhoepai" target="_blank"><i class="fab fa-instagram"></i> @filhoepai</a></div></div></div>
+
+    <header class="header" id="header">
+        <div class="container header-content">
+            <button class="mobile-hamburger" id="mobileHamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+            <a href="index.html" class="logo"><img src="Cleber Store.png" alt="Filho e Pai" class="logo-img"></a>
+            <div class="search-bar" id="searchBar"><i class="fas fa-search search-icon-left"></i><input type="text" placeholder="O que você está procurando?" id="searchInput" autocomplete="off"><button class="search-btn" aria-label="Buscar"><i class="fas fa-arrow-right"></i></button></div>
+            <div class="header-actions">
+                <a href="conta.html" class="header-action-item active" id="accountBtn"><i class="far fa-user"></i><div class="action-text"><span class="action-label">Minha</span><strong>Conta</strong></div></a>
+                <a href="#" class="header-action-item wishlist-action" id="wishlistBtn"><i class="far fa-heart"></i><span class="action-count" id="wishlistCount">0</span></a>
+                <a href="#" class="header-action-item cart-action" id="cartBtn"><i class="fas fa-shopping-bag"></i><span class="cart-badge" id="cartBadge">0</span><div class="action-text"><span class="action-label">Minha</span><strong>Sacola</strong></div></a>
+            </div>
+        </div>
+        <nav class="main-nav" id="mainNav"><div class="container"><ul class="nav-list">
+            <li class="nav-item"><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
+            <li class="nav-item"><a href="todos-produtos.html">Todos os Tênis</a></li>
+            <li class="nav-item highlight"><a href="lancamentos.html"><span class="nav-pulse"></span>🔥 Lançamentos</a></li>
+            <li class="nav-item has-mega">
+                <a href="camisas-selecao.html">Nike Air Max <i class="fas fa-chevron-down"></i></a>
+                <div class="mega-menu">
+                    <div class="mega-col"><h4>Air Max TN</h4><a href="camisas-selecao.html">Air Max Plus TN 1</a><a href="camisas-selecao.html">Air Max Plus TN 3</a><a href="camisas-selecao.html">Air Max DN</a></div>
+                    <div class="mega-col"><h4>Air Max 95/90</h4><a href="camisas-selecao.html">Triple Black</a><a href="camisas-selecao.html">Triple White</a><a href="camisas-selecao.html">Neon</a></div>
+                    <div class="mega-col"><h4>Colaborações</h4><a href="camisas-selecao.html">TN x Lacoste</a><a href="camisas-selecao.html">Nocta Glide</a></div>
+                </div>
+            </li>
+            <li class="nav-item"><a href="modelo-jogador.html">Air Force 1</a></li>
+            <li class="nav-item"><a href="modelo-torcedor.html">Jordan</a></li>
+            <li class="nav-item sale"><a href="promocoes.html"><i class="fas fa-tag"></i> Promoções</a></li>
+        </ul></div></nav>
+    </header>
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <!-- PAGE HERO -->
+    <section class="page-hero">
+        <div class="container">
+            <nav class="breadcrumb"><a href="index.html">Início</a><i class="fas fa-chevron-right"></i><span id="pageHeroTitle">Minha Conta</span></nav>
+            <h1 class="page-title" id="pageMainTitle">Minha Conta</h1>
+            <p class="page-subtitle" id="pageSubTitle">Faça login ou crie sua conta para uma experiência personalizada</p>
+        </div>
+    </section>
+
+    <!-- MAIN -->
+    <div class="conta-wrapper">
+        <div class="container">
+
+            <!-- ══ AUTH SECTION ══ -->
+            <div id="authSection">
+                <div class="auth-card">
+                    <div class="auth-tabs">
+                        <button class="auth-tab active" id="tabLogin"    onclick="switchTab('login')"><i class="fas fa-sign-in-alt"></i> Entrar</button>
+                        <button class="auth-tab"        id="tabRegister" onclick="switchTab('register')"><i class="fas fa-user-plus"></i> Cadastrar</button>
+                    </div>
+
+                    <!-- LOGIN -->
+                    <div class="auth-form-panel active" id="panelLogin">
+                        <h2>Bem-vindo de volta!</h2>
+                        <p class="auth-sub">Entre com sua conta para continuar comprando</p>
+
+                        <div class="auth-error" id="loginError"><i class="fas fa-exclamation-circle"></i> <span id="loginErrorMsg">E-mail ou senha incorretos</span></div>
+                        <div class="auth-success" id="loginSuccess"><i class="fas fa-check-circle"></i> Login realizado! Redirecionando...</div>
+
+                        <form class="auth-form" id="loginForm" onsubmit="doLogin(event)">
+                            <div class="form-group">
+                                <label>E-mail</label>
+                                <div class="input-wrap"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="seu@email.com" autocomplete="email" required></div>
+                            </div>
+                            <div class="form-group">
+                                <label>Senha</label>
+                                <div class="input-wrap"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" required></div>
+                            </div>
+                            <div style="text-align:right;margin-bottom:16px">
+                                <a href="#" onclick="showForgotPassword(event)" style="font-size:13px;color:var(--accent,#0057b8);font-weight:600;text-decoration:none">Esqueci minha senha</a>
+                            </div>
+                            <button type="submit" class="btn-auth"><i class="fas fa-sign-in-alt"></i> Entrar na Minha Conta</button>
+                        </form>
+
+                        <div class="auth-divider">ou entre com</div>
+
+                        <!-- GOOGLE SIGN-IN -->
+                        <button class="btn-google" onclick="signInWithGoogle()" id="btnGoogle">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                            </svg>
+                            Entrar com Google
+                        </button>
+
+                        <p style="text-align:center;margin-top:16px;font-size:13px;color:#64748b">Não tem conta? <a href="#" onclick="switchTab('register')" style="color:var(--accent,#0057b8);font-weight:700;text-decoration:none">Cadastre-se grátis</a></p>
+                    </div>
+
+                    <!-- REGISTER -->
+                    <div class="auth-form-panel" id="panelRegister">
+                        <h2>Crie sua conta</h2>
+                        <p class="auth-sub">Cadastre-se e acompanhe seus pedidos com facilidade</p>
+
+                        <div class="auth-error"   id="registerError"><i class="fas fa-exclamation-circle"></i> <span id="registerErrorMsg">Erro ao cadastrar</span></div>
+                        <div class="auth-success" id="registerSuccess"><i class="fas fa-check-circle"></i> Conta criada! Entrando automaticamente...</div>
+
+                        <form class="auth-form" id="registerForm" onsubmit="doRegister(event)">
+                            <div class="form-row">
+                                <div class="form-group"><label>Nome</label><div class="input-wrap"><i class="fas fa-user"></i><input type="text" id="regName" placeholder="Seu nome" required></div></div>
+                                <div class="form-group"><label>Sobrenome</label><div class="input-wrap"><i class="fas fa-user"></i><input type="text" id="regLastName" placeholder="Sobrenome" required></div></div>
+                            </div>
+                            <div class="form-group"><label>E-mail</label><div class="input-wrap"><i class="fas fa-envelope"></i><input type="email" id="regEmail" placeholder="seu@email.com" required></div></div>
+                            <div class="form-group"><label>WhatsApp</label><div class="input-wrap"><i class="fab fa-whatsapp"></i><input type="tel" id="regPhone" placeholder="(11) 99999-9999"></div></div>
+                            <div class="form-row">
+                                <div class="form-group"><label>Senha</label><div class="input-wrap"><i class="fas fa-lock"></i><input type="password" id="regPassword" placeholder="Mín. 6 caracteres" minlength="6" required></div></div>
+                                <div class="form-group"><label>Confirmar</label><div class="input-wrap"><i class="fas fa-lock"></i><input type="password" id="regConfirm" placeholder="Repita" required></div></div>
+                            </div>
+                            <div class="terms-check">
+                                <input type="checkbox" id="termsAccept" required>
+                                <label for="termsAccept">Li e concordo com os <a href="termos-uso.html" target="_blank">Termos de Uso</a> e a <a href="politica-privacidade.html" target="_blank">Política de Privacidade</a></label>
+                            </div>
+                            <button type="submit" class="btn-auth" style="margin-top:16px"><i class="fas fa-user-plus"></i> Criar Conta Grátis</button>
+                        </form>
+
+                        <div class="auth-divider">ou cadastre com</div>
+                        <button class="btn-google" onclick="signInWithGoogle()">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                            </svg>
+                            Cadastrar com Google
+                        </button>
+
+                        <p style="text-align:center;margin-top:16px;font-size:13px;color:#64748b">Já tem conta? <a href="#" onclick="switchTab('login')" style="color:var(--accent,#0057b8);font-weight:700;text-decoration:none">Entrar</a></p>
+                    </div>
+                </div>
+
+                <!-- BENEFITS -->
+                <div class="auth-benefits">
+                    <div class="benefit-item"><i class="fas fa-shipping-fast"></i><strong>Rastreie pedidos</strong><span>Acompanhe em tempo real</span></div>
+                    <div class="benefit-item"><i class="fas fa-heart"></i><strong>Favoritos</strong><span>Salve os modelos</span></div>
+                    <div class="benefit-item"><i class="fas fa-tag"></i><strong>Ofertas exclusivas</strong><span>Descontos para membros</span></div>
+                </div>
+            </div>
+
+            <!-- ══ PROFILE SECTION ══ -->
+            <div id="profileSection" class="profile-wrapper">
+                <div class="profile-header-card">
+                    <div class="profile-avatar" id="profileAvatar">FP</div>
+                    <div class="profile-header-info">
+                        <h2 id="profileName">Carregando...</h2>
+                        <p id="profileEmail">email@email.com</p>
+                        <div class="profile-stats">
+                            <div class="profile-stat"><strong id="profileOrderCount">0</strong><span>Pedidos</span></div>
+                            <div class="profile-stat"><strong id="profileWishCount">0</strong><span>Favoritos</span></div>
+                            <div class="profile-stat" id="googleBadge" style="display:none"><strong><i class="fab fa-google" style="font-size:14px"></i></strong><span>Google</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-nav">
+                    <button class="profile-nav-btn active" onclick="switchProfileTab('dados')"><i class="fas fa-user"></i> Meus Dados</button>
+                    <button class="profile-nav-btn" onclick="switchProfileTab('pedidos')"><i class="fas fa-shopping-bag"></i> Pedidos</button>
+                    <button class="profile-nav-btn" onclick="switchProfileTab('enderecos')"><i class="fas fa-map-marker-alt"></i> Endereços</button>
+                    <button class="profile-nav-btn" onclick="switchProfileTab('senha')"><i class="fas fa-lock"></i> Senha</button>
+                </div>
+
+                <!-- DADOS -->
+                <div class="profile-section active" id="tab-dados">
+                    <div class="profile-card">
+                        <h3><i class="fas fa-user-circle"></i> Informações Pessoais</h3>
+                        <form class="profile-form" onsubmit="saveProfile(event)">
+                            <div class="form-row">
+                                <div class="form-group"><label>Nome</label><input type="text" id="profileFirstName" required></div>
+                                <div class="form-group"><label>Sobrenome</label><input type="text" id="profileLastName" required></div>
+                            </div>
+                            <div class="form-group"><label>E-mail</label><input type="email" id="profileEmailInput" required></div>
+                            <div class="form-group"><label>WhatsApp</label><input type="tel" id="profilePhone" placeholder="(11) 99999-9999"></div>
+                            <div class="form-group"><label>CPF (opcional)</label><input type="text" id="profileCPF" placeholder="000.000.000-00"></div>
+                            <div class="form-group"><label>Data de Nascimento</label><input type="date" id="profileBirthdate"></div>
+                            <button type="submit" class="btn-save"><i class="fas fa-save"></i> Salvar Alterações</button>
+                        </form>
+                        <button class="btn-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Sair da Conta</button>
+                    </div>
+                </div>
+
+                <!-- PEDIDOS -->
+                <div class="profile-section" id="tab-pedidos">
+                    <div class="profile-card">
+                        <h3><i class="fas fa-shopping-bag"></i> Histórico de Pedidos</h3>
+                        <div id="ordersList"></div>
+                    </div>
+                </div>
+
+                <!-- ENDEREÇOS -->
+                <div class="profile-section" id="tab-enderecos">
+                    <div class="profile-card">
+                        <h3><i class="fas fa-map-marker-alt"></i> Meus Endereços</h3>
+                        <div id="addressesList"></div>
+                        <button class="btn-save" onclick="addAddress()" style="margin-top:16px"><i class="fas fa-plus"></i> Adicionar Endereço</button>
+                    </div>
+                </div>
+
+                <!-- SENHA -->
+                <div class="profile-section" id="tab-senha">
+                    <div class="profile-card">
+                        <h3><i class="fas fa-lock"></i> Alterar Senha</h3>
+                        <div id="pwdMsg" style="display:none;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:16px"></div>
+                        <form class="profile-form" onsubmit="changePassword(event)" id="pwdForm">
+                            <div class="form-group"><label>Senha Atual</label><input type="password" id="currentPwd" required></div>
+                            <div class="form-group"><label>Nova Senha</label><input type="password" id="newPwd" minlength="6" required></div>
+                            <div class="form-group"><label>Confirmar Nova Senha</label><input type="password" id="confirmPwd" required></div>
+                            <button type="submit" class="btn-save"><i class="fas fa-lock"></i> Alterar Senha</button>
+                        </form>
+                        <p id="googleAccountNote" style="display:none;font-size:13px;color:#64748b;margin-top:12px"><i class="fab fa-google"></i> Sua conta usa Google Sign-In. Para alterar a senha, gerencie sua Conta Google.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="border-top:1px solid #222;padding-top:20px">
+                <p>&copy; 2026 Filho e Pai. Todos os direitos reservados.</p>
+                <a href="admin.html" class="admin-link" title="Painel Admin"><i class="fas fa-cog"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="catalogo.js?v=20260601v1"></script>
+    <script src="script.js?v=20260601v1"></script>
+    <script>
+    // ═══════════════════════════════════════════════
+    //  CONTA FILHO E PAI — Auth System + Google Login
+    // ═══════════════════════════════════════════════
+    const CS_KEY   = 'cs_customers';
+    const CS_LOGIN = 'cs_logged_email';
+
+    // ── GOOGLE CLIENT ID ──
+    // Para ativar o Google Login:
+    // 1. Acesse: https://console.cloud.google.com/
+    // 2. Crie um projeto → APIs e Serviços → Credenciais → Criar ID do cliente OAuth
+    // 3. Tipo: Aplicativo Web. Adicione seu domínio em "Origens JS autorizadas"
+    // 4. Copie o Client ID e cole abaixo substituindo o placeholder
+    const GOOGLE_CLIENT_ID = 'SEU_GOOGLE_CLIENT_ID_AQUI.apps.googleusercontent.com';
+
+    function getCustomers() {
+        try { return JSON.parse(localStorage.getItem(CS_KEY)) || []; } catch { return []; }
+    }
+    function saveCustomers(arr) { localStorage.setItem(CS_KEY, JSON.stringify(arr)); }
+    function getLoggedEmail() { return localStorage.getItem(CS_LOGIN) || ''; }
+    function getLoggedCustomer() { const e = getLoggedEmail(); return e ? getCustomers().find(c => c.email === e) || null : null; }
+    function hash(s) { return btoa(unescape(encodeURIComponent(s))); }
+
+    // ── Tab Switch ──
+    function switchTab(tab) {
+        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.auth-form-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById(tab === 'login' ? 'tabLogin' : 'tabRegister').classList.add('active');
+        document.getElementById(tab === 'login' ? 'panelLogin' : 'panelRegister').classList.add('active');
+    }
+
+    // ── Show/Hide errors ──
+    function showMsg(elId, msg, type = 'error') {
+        const el = document.getElementById(elId);
+        if (!el) return;
+        el.className = type === 'error' ? 'auth-error show' : 'auth-success show';
+        el.querySelector('span') ? el.querySelector('span').textContent = msg : (el.innerHTML += ' ' + msg);
+        el.style.display = '';
+    }
+    function hideMsg(elId) { const el = document.getElementById(elId); if (el) el.className = el.className.replace(' show', ''); el.style.display = 'none'; }
+
+    // ── Login ──
+    function doLogin(e) {
+        e.preventDefault();
+        hideMsg('loginError'); hideMsg('loginSuccess');
+        const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+        const pass  = document.getElementById('loginPassword').value;
+        const c = getCustomers().find(x => x.email === email);
+        if (!c || (c.password && c.password !== hash(pass))) {
+            document.getElementById('loginErrorMsg').textContent = 'E-mail ou senha incorretos.';
+            document.getElementById('loginError').className = 'auth-error show';
+            document.getElementById('loginError').style.display = '';
+            return;
+        }
+        localStorage.setItem(CS_LOGIN, email);
+        document.getElementById('loginSuccess').className = 'auth-success show';
+        document.getElementById('loginSuccess').style.display = '';
+        setTimeout(() => location.reload(), 800);
+    }
+
+    // ── Register ──
+    function doRegister(e) {
+        e.preventDefault();
+        hideMsg('registerError'); hideMsg('registerSuccess');
+        const name = document.getElementById('regName').value.trim();
+        const last = document.getElementById('regLastName').value.trim();
+        const email = document.getElementById('regEmail').value.trim().toLowerCase();
+        const phone = document.getElementById('regPhone').value.trim();
+        const pass  = document.getElementById('regPassword').value;
+        const conf  = document.getElementById('regConfirm').value;
+
+        if (pass !== conf) {
+            document.getElementById('registerErrorMsg').textContent = 'As senhas não coincidem.';
+            document.getElementById('registerError').className = 'auth-error show';
+            document.getElementById('registerError').style.display = '';
+            return;
+        }
+        const customers = getCustomers();
+        if (customers.find(c => c.email === email)) {
+            document.getElementById('registerErrorMsg').textContent = 'E-mail já cadastrado. Faça login.';
+            document.getElementById('registerError').className = 'auth-error show';
+            document.getElementById('registerError').style.display = '';
+            return;
+        }
+        customers.push({ email, password: hash(pass), firstName: name, lastName: last, phone, cpf: '', birthdate: '', addresses: [], orders: [], wishlist: [], provider: 'email', createdAt: new Date().toISOString() });
+        saveCustomers(customers);
+        localStorage.setItem(CS_LOGIN, email);
+        document.getElementById('registerSuccess').className = 'auth-success show';
+        document.getElementById('registerSuccess').style.display = '';
+        setTimeout(() => location.reload(), 1000);
+    }
+
+    // ── Google Sign-In ──
+    function signInWithGoogle() {
+        if (GOOGLE_CLIENT_ID.includes('SEU_GOOGLE_CLIENT_ID')) {
+            // Modo demo: simula login Google com dados fictícios para testes
+            const demoUser = { email: 'usuario@gmail.com', given_name: 'Usuário', family_name: 'Google', picture: 'https://lh3.googleusercontent.com/a/default-user', sub: 'demo_google_123' };
+            handleGoogleCredential(demoUser);
+            return;
+        }
+        // Produção: usar Google Identity Services
+        google.accounts.id.initialize({
+            client_id: GOOGLE_CLIENT_ID,
+            callback: (response) => {
+                const payload = JSON.parse(atob(response.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+                handleGoogleCredential(payload);
+            }
+        });
+        google.accounts.id.prompt();
+    }
+
+    function handleGoogleCredential(payload) {
+        const email = payload.email.toLowerCase();
+        const customers = getCustomers();
+        let c = customers.find(x => x.email === email);
+        if (!c) {
+            c = {
+                email, password: null,
+                firstName: payload.given_name || '',
+                lastName:  payload.family_name || '',
+                phone: '', cpf: '', birthdate: '',
+                picture: payload.picture || '',
+                addresses: [], orders: [], wishlist: [],
+                provider: 'google',
+                googleId: payload.sub,
+                createdAt: new Date().toISOString()
+            };
+            customers.push(c);
+            saveCustomers(customers);
+        }
+        localStorage.setItem(CS_LOGIN, email);
+        document.getElementById('loginSuccess').className = 'auth-success show';
+        document.getElementById('loginSuccess').style.display = '';
+        document.getElementById('loginSuccess').innerHTML = '<i class="fas fa-check-circle"></i> Login com Google realizado!';
+        setTimeout(() => location.reload(), 800);
+    }
+
+    // ── Forgot Password ──
+    function showForgotPassword(e) {
+        e.preventDefault();
+        const email = prompt('Digite seu e-mail cadastrado:');
+        if (!email) return;
+        const c = getCustomers().find(x => x.email === email.trim().toLowerCase());
+        if (!c) { alert('E-mail não encontrado.'); return; }
+        if (c.provider === 'google') { alert('Sua conta usa Google. Para redefinir a senha, acesse sua Conta Google.'); return; }
+        alert('Entre em contato via WhatsApp (11) 98427-0638 informando seu e-mail para redefinir sua senha.');
+    }
+
+    // ── Logout ──
+    function doLogout() {
+        // Also sign out of Google if applicable
+        if (typeof google !== 'undefined') {
+            try { google.accounts.id.disableAutoSelect(); } catch {}
+        }
+        localStorage.removeItem(CS_LOGIN);
+        location.reload();
+    }
+
+    // ── Profile Tab Switch ──
+    function switchProfileTab(tab) {
+        document.querySelectorAll('.profile-nav-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.profile-section').forEach(s => s.classList.remove('active'));
+        document.getElementById('tab-' + tab).classList.add('active');
+        document.querySelectorAll('.profile-nav-btn').forEach(b => {
+            if (b.textContent.toLowerCase().includes(tab === 'dados' ? 'dados' : tab === 'pedidos' ? 'pedido' : tab === 'enderecos' ? 'endere' : 'senha'))
+                b.classList.add('active');
+        });
+    }
+
+    // ── Save Profile ──
+    function saveProfile(e) {
+        e.preventDefault();
+        const email = getLoggedEmail();
+        const customers = getCustomers();
+        const idx = customers.findIndex(c => c.email === email);
+        if (idx === -1) return;
+        customers[idx].firstName = document.getElementById('profileFirstName').value.trim();
+        customers[idx].lastName  = document.getElementById('profileLastName').value.trim();
+        customers[idx].email     = document.getElementById('profileEmailInput').value.trim().toLowerCase();
+        customers[idx].phone     = document.getElementById('profilePhone').value.trim();
+        customers[idx].cpf       = document.getElementById('profileCPF').value.trim();
+        customers[idx].birthdate = document.getElementById('profileBirthdate').value;
+        saveCustomers(customers);
+        localStorage.setItem(CS_LOGIN, customers[idx].email);
+        alert('Dados salvos com sucesso!');
+        renderProfile();
+    }
+
+    // ── Change Password ──
+    function changePassword(e) {
+        e.preventDefault();
+        const msgEl = document.getElementById('pwdMsg');
+        const c = getLoggedCustomer();
+        if (!c || c.provider === 'google') return;
+        const cur  = document.getElementById('currentPwd').value;
+        const novo = document.getElementById('newPwd').value;
+        const conf = document.getElementById('confirmPwd').value;
+        if (c.password !== hash(cur)) { msgEl.style.cssText = 'display:block;background:#fee2e2;color:#b91c1c'; msgEl.textContent = 'Senha atual incorreta.'; return; }
+        if (novo !== conf)            { msgEl.style.cssText = 'display:block;background:#fee2e2;color:#b91c1c'; msgEl.textContent = 'Senhas não coincidem.'; return; }
+        const customers = getCustomers();
+        const idx = customers.findIndex(x => x.email === c.email);
+        customers[idx].password = hash(novo);
+        saveCustomers(customers);
+        msgEl.style.cssText = 'display:block;background:#dcfce7;color:#166534';
+        msgEl.textContent = 'Senha alterada com sucesso!';
+        document.getElementById('pwdForm').reset();
+    }
+
+    // ── Add Address ──
+    function addAddress() {
+        const street = prompt('Rua / Avenida:'); if (!street) return;
+        const number = prompt('Número:') || '';
+        const comp   = prompt('Complemento (opcional):') || '';
+        const hood   = prompt('Bairro:') || '';
+        const city   = prompt('Cidade:') || '';
+        const state  = prompt('Estado (ex: SP):') || '';
+        const cep    = prompt('CEP:') || '';
+        const email  = getLoggedEmail();
+        const customers = getCustomers();
+        const idx = customers.findIndex(c => c.email === email);
+        if (idx === -1) return;
+        customers[idx].addresses = customers[idx].addresses || [];
+        customers[idx].addresses.push({ street, number, complement: comp, neighborhood: hood, city, state, cep });
+        saveCustomers(customers);
+        renderAddresses(customers[idx]);
+    }
+
+    function removeAddress(i) {
+        const email = getLoggedEmail(); const customers = getCustomers();
+        const idx = customers.findIndex(c => c.email === email); if (idx === -1) return;
+        customers[idx].addresses.splice(i, 1); saveCustomers(customers); renderAddresses(customers[idx]);
+    }
+
+    // ── Render Profile ──
+    function renderProfile() {
+        const c = getLoggedCustomer(); if (!c) return;
+        const full = (c.firstName + ' ' + c.lastName).trim();
+        document.getElementById('profileName').textContent  = full || c.email;
+        document.getElementById('profileEmail').textContent = c.email;
+        document.getElementById('profileOrderCount').textContent = (c.orders || []).length;
+        document.getElementById('profileWishCount').textContent  = (c.wishlist || []).length;
+
+        // Avatar
+        const avatarEl = document.getElementById('profileAvatar');
+        if (c.picture) {
+            avatarEl.innerHTML = `<img src="${c.picture}" alt="Avatar">`;
+        } else {
+            avatarEl.textContent = ((c.firstName[0] || '') + (c.lastName[0] || '')).toUpperCase() || 'FP';
+        }
+
+        // Google badge
+        if (c.provider === 'google') {
+            document.getElementById('googleBadge').style.display = '';
+            document.getElementById('googleAccountNote').style.display = '';
+            document.getElementById('pwdForm').style.display = 'none';
+        }
+
+        document.getElementById('profileFirstName').value   = c.firstName || '';
+        document.getElementById('profileLastName').value    = c.lastName  || '';
+        document.getElementById('profileEmailInput').value  = c.email;
+        document.getElementById('profilePhone').value       = c.phone     || '';
+        document.getElementById('profileCPF').value         = c.cpf       || '';
+        document.getElementById('profileBirthdate').value   = c.birthdate || '';
+        document.getElementById('pageMainTitle').textContent = 'Olá, ' + (c.firstName || 'Cliente') + '!';
+        document.getElementById('pageSubTitle').textContent  = 'Gerencie sua conta, pedidos e preferências';
+
+        renderOrders(c);
+        renderAddresses(c);
+    }
+
+    function renderOrders(c) {
+        const el = document.getElementById('ordersList');
+        const orders = c.orders || [];
+        if (!orders.length) { el.innerHTML = '<div class="empty-state"><i class="fas fa-shopping-bag"></i><h3>Nenhum pedido ainda</h3><p>Seus pedidos aparecem aqui após a compra.</p><a href="todos-produtos.html" style="color:var(--accent,#0057b8);font-weight:700">Ver Produtos</a></div>'; return; }
+        const labels = { pending: 'Pendente', shipped: 'Enviado', delivered: 'Entregue' };
+        el.innerHTML = orders.map(o => `<div class="order-card"><div class="order-header"><div><strong>#${o.id}</strong> <span style="font-size:12px;color:#64748b">${new Date(o.date).toLocaleDateString('pt-BR')}</span></div><span class="order-status ${o.status}">${labels[o.status]||o.status}</span></div><div style="padding:14px 16px"><div style="font-weight:600;color:#374151"><i class="fas fa-shoe-prints" style="color:#94a3b8;margin-right:6px"></i>${o.product}</div><div style="font-size:16px;font-weight:800;color:var(--accent,#0057b8);margin-top:4px">R$ ${Number(o.value).toFixed(2).replace('.',',')}</div></div></div>`).join('');
+    }
+
+    function renderAddresses(c) {
+        const el = document.getElementById('addressesList');
+        const addrs = c.addresses || [];
+        if (!addrs.length) { el.innerHTML = '<div class="empty-state"><i class="fas fa-map-marker-alt"></i><h3>Nenhum endereço</h3><p>Adicione um endereço para agilizar seus pedidos.</p></div>'; return; }
+        el.innerHTML = addrs.map((a, i) => `<div style="border:2px solid #e2e8f0;border-radius:10px;padding:14px 16px;margin-bottom:10px"><div style="font-weight:700;font-size:14px">${a.street}, ${a.number}${a.complement?' — '+a.complement:''}</div><div style="font-size:13px;color:#64748b;margin-top:2px">${a.neighborhood} · ${a.city}/${a.state} · CEP: ${a.cep}</div><button onclick="removeAddress(${i})" style="margin-top:8px;background:none;border:none;color:#dc2626;font-size:12px;font-weight:600;cursor:pointer"><i class="fas fa-trash"></i> Remover</button></div>`).join('');
+    }
+
+    // ── INIT ──
+    document.addEventListener('DOMContentLoaded', () => {
+        // Initialize Google Identity Services if Client ID is configured
+        if (!GOOGLE_CLIENT_ID.includes('SEU_GOOGLE_CLIENT_ID') && typeof google !== 'undefined') {
+            google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: (response) => {
+                    const payload = JSON.parse(atob(response.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+                    handleGoogleCredential(payload);
+                },
+                auto_select: false
+            });
+        }
+
+        const c = getLoggedCustomer();
+        if (c) {
+            document.getElementById('authSection').style.display    = 'none';
+            document.getElementById('profileSection').style.display = 'block';
+            renderProfile();
+        }
+    });
+    </script>
+</body>
+</html>
