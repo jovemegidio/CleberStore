@@ -1,0 +1,623 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filho e Pai | Store: Todos os Tênis</title>
+    <meta name="description" content="Catálogo completo de tênis importados premium: Nike Air Max, Air Force 1, Jordan, Asics, Mizuno e mais. Frete grátis, entrega rápida para todo o Brasil.">
+    <meta name="theme-color" content="#0057b8">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="stylesheet" href="styles.css?v=20260601v8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ---- PAGE-SPECIFIC: TODOS OS TÊNIS ---- */
+        .tenis-hero {
+            background: var(--black);
+            padding: 52px 0 44px;
+            position: relative;
+            overflow: hidden;
+        }
+        .tenis-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 85% 50%, rgba(0,87,184,0.12) 0%, transparent 55%);
+            pointer-events: none;
+        }
+        .tenis-hero-inner { position: relative; z-index: 1; }
+        .tenis-hero .breadcrumb { margin-bottom: 14px; }
+        .tenis-hero .breadcrumb a,
+        .tenis-hero .breadcrumb i { color: rgba(255,255,255,0.45); }
+        .tenis-hero .breadcrumb span { color: rgba(255,255,255,0.75); }
+
+        .tenis-hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(32px, 5vw, 60px);
+            font-weight: 900;
+            color: #fff;
+            line-height: 0.95;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        .tenis-hero-title span { color: var(--accent); }
+        .tenis-hero-sub {
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
+            max-width: 480px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        /* BRAND BADGES */
+        .brand-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .brand-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.65);
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .brand-tag:hover,
+        .brand-tag.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+        /* CATEGORY QUICK LINKS */
+        .category-quick-nav {
+            background: var(--surface);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 12px 0;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .category-quick-nav::-webkit-scrollbar { display: none; }
+        .quick-nav-inner {
+            display: flex;
+            gap: 8px;
+            white-space: nowrap;
+            padding: 0 4px;
+        }
+        .quick-nav-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 16px;
+            border-radius: var(--radius-full);
+            border: 1.5px solid var(--gray-200);
+            background: var(--card-bg);
+            color: var(--gray-600);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            white-space: nowrap;
+            text-decoration: none;
+        }
+        .quick-nav-item:hover { border-color: var(--accent); color: var(--accent); }
+        .quick-nav-item.active { background: var(--black); border-color: var(--black); color: #fff; }
+        .quick-nav-item i { font-size: 10px; }
+
+        /* SIDEBAR + GRID LAYOUT */
+        .tenis-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 28px;
+            padding: 32px 0 60px;
+            align-items: start;
+        }
+
+        /* SIDEBAR */
+        .tenis-sidebar { position: sticky; top: calc(var(--header-h) + 16px); }
+        .sidebar-section {
+            background: var(--card-bg);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .sidebar-title {
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--gray-700);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--gray-200);
+        }
+        .sidebar-options { display: flex; flex-direction: column; gap: 6px; }
+        .sidebar-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: background var(--transition-fast);
+            font-size: 13px;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+        .sidebar-option:hover { background: var(--surface); color: var(--gray-700); }
+        .sidebar-option.active { background: var(--accent); color: #fff; }
+        .sidebar-option i { width: 16px; text-align: center; font-size: 12px; }
+        .sidebar-count {
+            margin-left: auto;
+            font-size: 11px;
+            background: var(--surface);
+            padding: 2px 7px;
+            border-radius: var(--radius-full);
+            color: var(--gray-500);
+            font-weight: 600;
+        }
+        .sidebar-option.active .sidebar-count { background: rgba(255,255,255,0.2); color: #fff; }
+
+        .price-range { display: flex; flex-direction: column; gap: 10px; }
+        .price-inputs { display: flex; gap: 8px; align-items: center; }
+        .price-inputs input {
+            flex: 1;
+            padding: 7px 10px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            background: var(--body-bg);
+            color: var(--gray-700);
+            font-family: var(--font);
+        }
+        .price-inputs span { font-size: 12px; color: var(--gray-500); }
+        .price-apply {
+            padding: 7px 14px;
+            background: var(--black);
+            color: #fff;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background var(--transition-fast);
+        }
+        .price-apply:hover { background: var(--accent); }
+
+        /* TOOLBAR */
+        .tenis-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tenis-result-count { font-size: 13px; color: var(--gray-500); }
+        .tenis-result-count strong { color: var(--gray-700); font-weight: 700; font-size: 15px; }
+        .toolbar-right { display: flex; align-items: center; gap: 10px; }
+        .toolbar-sort {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .toolbar-sort label { font-size: 11px; color: var(--gray-500); font-weight: 600; white-space: nowrap; }
+        .toolbar-sort select {
+            font-size: 12px;
+            border: 1.5px solid var(--gray-200);
+            background: var(--card-bg);
+            color: var(--gray-700);
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font);
+            cursor: pointer;
+        }
+        .view-toggle { display: flex; gap: 4px; }
+        .view-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--gray-200);
+            background: var(--card-bg);
+            color: var(--gray-500);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .view-btn.active, .view-btn:hover { background: var(--black); border-color: var(--black); color: #fff; }
+
+        /* ACTIVE FILTERS */
+        .active-filters {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .active-filters-label { font-size: 11px; color: var(--gray-500); font-weight: 600; }
+        .filter-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .filter-tag button {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.8);
+            cursor: pointer;
+            padding: 0;
+            font-size: 10px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+        }
+        .filter-tag button:hover { color: #fff; }
+        .clear-all-btn {
+            font-size: 11px;
+            color: var(--gray-500);
+            cursor: pointer;
+            text-decoration: underline;
+            background: none;
+            border: none;
+        }
+        .clear-all-btn:hover { color: var(--accent); }
+
+        @media (max-width: 960px) {
+            .tenis-layout { grid-template-columns: 1fr; }
+            .tenis-sidebar { position: static; }
+            .sidebar-section { display: none; }
+        }
+        @media (max-width: 480px) {
+            .tenis-hero-title { font-size: 28px; }
+            .tenis-hero { padding: 32px 0 28px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <span><i class="fas fa-truck"></i> Frete grátis acima de R$ 299,90</span>
+                <span class="top-bar-divider">|</span>
+                <span><i class="fas fa-shield-alt"></i> Compra 100% segura</span>
+                <span class="top-bar-divider">|</span>
+                <span><i class="fab fa-pix"></i> 5% OFF no PIX</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://wa.me/5511984270638" target="_blank"><i class="fab fa-whatsapp"></i> (11) 98427-0638</a>
+                <span class="top-bar-divider">|</span>
+                <a href="https://www.instagram.com/paiefilhoimportss" target="_blank"><i class="fab fa-instagram"></i> @paiefilhoimportss</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="header" id="header">
+        <div class="container header-content">
+            <button class="mobile-hamburger" id="mobileHamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+            <a href="index.html" class="logo">
+                <img src="logo-principal.png?v=20260601-logo" alt="Filho e Pai" class="logo-img">
+            </a>
+            <div class="search-bar" id="searchBar">
+                <i class="fas fa-search search-icon-left"></i>
+                <input type="text" placeholder="O que você está procurando?" id="searchInput" autocomplete="off" aria-label="Buscar produtos">
+                <button class="search-btn" aria-label="Buscar"><i class="fas fa-arrow-right"></i></button>
+            </div>
+            <div class="header-actions">
+                <a href="conta.html" class="header-action-item" id="accountBtn">
+                    <i class="far fa-user"></i>
+                    <div class="action-text"><span class="action-label">Olá, faça seu</span><strong>Login</strong></div>
+                </a>
+                <a href="#" class="header-action-item wishlist-action" id="wishlistBtn" aria-label="Lista de desejos">
+                    <i class="far fa-heart"></i><span class="action-count" id="wishlistCount">0</span>
+                </a>
+                <a href="#" class="header-action-item cart-action" id="cartBtn" aria-label="Minha sacola">
+                    <i class="fas fa-shopping-bag"></i><span class="cart-badge" id="cartBadge">0</span>
+                    <div class="action-text"><span class="action-label">Minha</span><strong>Sacola</strong></div>
+                </a>
+            </div>
+        </div>
+        <nav class="main-nav" id="mainNav" aria-label="Navegação principal">
+            <div class="container">
+                <ul class="nav-list" role="list">
+                    <li class="nav-item"><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
+                    <li class="nav-item active"><a href="todos-tenis.html">Todos os Tênis</a></li>
+                    <li class="nav-item highlight"><a href="lancamentos.html"><span class="nav-pulse"></span><i class="fas fa-fire"></i> Lançamentos</a></li>
+                    <li class="nav-item"><a href="camisas-selecao.html">Nike Air Max</a></li>
+                    <li class="nav-item"><a href="modelo-jogador.html">Air Force 1</a></li>
+                    <li class="nav-item"><a href="modelo-torcedor.html">Jordan</a></li>
+                    <li class="nav-item sale"><a href="promocoes.html"><i class="fas fa-tag"></i> Promoções</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <main id="main-content">
+        <!-- HERO -->
+        <section class="tenis-hero" aria-labelledby="tenis-heading">
+            <div class="container tenis-hero-inner">
+                <nav class="breadcrumb" aria-label="Breadcrumb">
+                    <a href="index.html">Início</a>
+                    <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                    <span aria-current="page">Todos os Tênis</span>
+                </nav>
+                <h1 class="tenis-hero-title" id="tenis-heading">
+                    Catálogo<br><span>Completo</span>
+                </h1>
+                <p class="tenis-hero-sub">Tênis importados premium — Nike, Jordan, Asics, Mizuno e mais. Qualidade e estilo para cada pisada.</p>
+                <div class="brand-row" role="list" aria-label="Marcas disponíveis">
+                    <span class="brand-tag active" role="listitem"><i class="fas fa-check"></i> Todos</span>
+                    <span class="brand-tag" role="listitem">Nike</span>
+                    <span class="brand-tag" role="listitem">Jordan</span>
+                    <span class="brand-tag" role="listitem">Asics</span>
+                    <span class="brand-tag" role="listitem">Mizuno</span>
+                    <span class="brand-tag" role="listitem">Adidas</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUICK NAV -->
+        <nav class="category-quick-nav" aria-label="Categorias de tênis">
+            <div class="container">
+                <div class="quick-nav-inner">
+                    <a href="#" class="quick-nav-item active" data-filter="all"><i class="fas fa-th"></i> Todos</a>
+                    <a href="#" class="quick-nav-item" data-filter="nike"><i class="fas fa-running"></i> Nike</a>
+                    <a href="#" class="quick-nav-item" data-filter="airforce"><i class="fas fa-shoe-prints"></i> Air Force 1</a>
+                    <a href="#" class="quick-nav-item" data-filter="jordan"><i class="fas fa-basketball-ball"></i> Jordan</a>
+                    <a href="#" class="quick-nav-item" data-filter="outros"><i class="fas fa-trophy"></i> Asics & Mizuno</a>
+                    <a href="#" class="quick-nav-item" data-filter="adidas"><i class="fas fa-star"></i> Adidas</a>
+                    <a href="lancamentos.html" class="quick-nav-item"><i class="fas fa-fire"></i> Lançamentos</a>
+                    <a href="promocoes.html" class="quick-nav-item"><i class="fas fa-tag"></i> Em Promoção</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- LAYOUT -->
+        <div class="container">
+            <div class="tenis-layout">
+                <!-- SIDEBAR -->
+                <aside class="tenis-sidebar" aria-label="Filtros">
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title"><i class="fas fa-tag"></i> Categoria</h3>
+                        <div class="sidebar-options" role="list">
+                            <div class="sidebar-option active" role="listitem" data-filter="all"><i class="fas fa-th"></i> Todos os tênis</div>
+                            <div class="sidebar-option" role="listitem" data-filter="nike"><i class="fas fa-running"></i> Nike</div>
+                            <div class="sidebar-option" role="listitem" data-filter="airforce"><i class="fas fa-shoe-prints"></i> Air Force 1</div>
+                            <div class="sidebar-option" role="listitem" data-filter="jordan"><i class="fas fa-basketball-ball"></i> Jordan</div>
+                            <div class="sidebar-option" role="listitem" data-filter="outros"><i class="fas fa-trophy"></i> Asics & Mizuno</div>
+                            <div class="sidebar-option" role="listitem" data-filter="adidas"><i class="fas fa-star"></i> Adidas</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title"><i class="fas fa-ruler-horizontal"></i> Numeração</h3>
+                        <div class="sidebar-options" role="group" aria-label="Tamanhos disponíveis">
+                            <div class="sidebar-option" role="option">36 — 37</div>
+                            <div class="sidebar-option" role="option">38 — 39</div>
+                            <div class="sidebar-option active" role="option">40 — 41</div>
+                            <div class="sidebar-option" role="option">42 — 43</div>
+                            <div class="sidebar-option" role="option">44 — 45</div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title"><i class="fas fa-dollar-sign"></i> Faixa de preço</h3>
+                        <div class="price-range">
+                            <div class="price-inputs">
+                                <input type="number" placeholder="Min" aria-label="Preço mínimo" min="0">
+                                <span>—</span>
+                                <input type="number" placeholder="Max" aria-label="Preço máximo" min="0">
+                            </div>
+                            <button class="price-apply">Aplicar</button>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title"><i class="fas fa-star"></i> Destaques</h3>
+                        <div class="sidebar-options">
+                            <div class="sidebar-option"><i class="fas fa-fire"></i> Lançamentos</div>
+                            <div class="sidebar-option"><i class="fas fa-percent"></i> Em promoção</div>
+                            <div class="sidebar-option"><i class="fas fa-check-circle"></i> Em estoque</div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- MAIN CONTENT -->
+                <div class="tenis-content">
+                    <div class="tenis-toolbar">
+                        <p class="tenis-result-count"><strong id="tenisCount">38</strong> tênis encontrados</p>
+                        <div class="toolbar-right">
+                            <div class="toolbar-sort">
+                                <label for="tenisSort">Ordenar:</label>
+                                <select id="tenisSort" aria-label="Ordenar produtos">
+                                    <option value="relevancia">Relevância</option>
+                                    <option value="menor-preco">Menor preço</option>
+                                    <option value="maior-preco">Maior preço</option>
+                                    <option value="lancamentos">Lançamentos</option>
+                                    <option value="nome-az">Nome A–Z</option>
+                                </select>
+                            </div>
+                            <div class="view-toggle" role="group" aria-label="Visualização">
+                                <button class="view-btn active" data-view="grid" aria-pressed="true" aria-label="Grade"><i class="fas fa-th"></i></button>
+                                <button class="view-btn" data-view="list" aria-pressed="false" aria-label="Lista"><i class="fas fa-list"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="products-grid catalog-grid" id="tenisCatalogGrid" data-catalog="todos" role="list" aria-label="Catálogo de tênis">
+                        <!-- Carregado por catalogo.js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-col footer-about">
+                    <a href="index.html" class="footer-logo" aria-label="Filho e Pai — página inicial">
+                        <img src="logo-rodape.png?v=20260601-logo" alt="Filho e Pai" class="logo-img footer-logo-img">
+                    </a>
+                    <p>Tênis importados premium: Nike Air Max TN, Air Force 1, Jordan, Asics e Mizuno. Qualidade e conforto excepcionais para todo o Brasil.</p>
+                    <div class="footer-socials" aria-label="Redes sociais">
+                        <a href="https://www.instagram.com/paiefilhoimportss" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/5511984270638" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://www.tiktok.com/@filhoepai" target="_blank" rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://www.youtube.com/@filhoepai" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Navegação</h4>
+                    <ul>
+                        <li><a href="index.html">Início</a></li>
+                        <li><a href="todos-tenis.html">Todos os Tênis</a></li>
+                        <li><a href="lancamentos.html">Lançamentos</a></li>
+                        <li><a href="camisas-selecao.html">Nike Air Max</a></li>
+                        <li><a href="modelo-jogador.html">Air Force 1</a></li>
+                        <li><a href="modelo-torcedor.html">Jordan</a></li>
+                        <li><a href="promocoes.html">Promoções</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Institucional</h4>
+                    <ul>
+                        <li><a href="sobre-nos.html">Sobre Nós</a></li>
+                        <li><a href="guia-tamanhos.html">Guia de Tamanhos</a></li>
+                        <li><a href="rastreamento.html">Rastrear Pedido</a></li>
+                        <li><a href="politica-privacidade.html">Política de Privacidade</a></li>
+                        <li><a href="termos-uso.html">Termos de Uso</a></li>
+                        <li><a href="trocas-devolucoes.html">Trocas e Devoluções</a></li>
+                        <li><a href="perguntas-frequentes.html">Perguntas Frequentes</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Atendimento</h4>
+                    <ul class="contact-list">
+                        <li><a href="https://wa.me/5511984270638"><i class="fab fa-whatsapp"></i> (11) 98427-0638</a></li>
+                        <li><i class="fas fa-clock"></i> Seg a Sex: 9h às 18h</li>
+                    </ul>
+                    <h4 class="mt-20">Pagamento</h4>
+                    <div class="payment-methods" aria-label="Formas de pagamento">
+                        <span class="payment-icon" title="Mastercard"><i class="fab fa-cc-mastercard"></i></span>
+                        <span class="payment-icon" title="Visa"><i class="fab fa-cc-visa"></i></span>
+                        <span class="payment-icon" title="Amex"><i class="fab fa-cc-amex"></i></span>
+                        <span class="payment-icon" title="PIX"><i class="fab fa-pix"></i></span>
+                        <span class="payment-icon" title="Boleto"><i class="fas fa-barcode"></i></span>
+                        <span class="payment-icon" title="Elo"><i class="fas fa-credit-card"></i></span>
+                    </div>
+                    <h4 class="mt-20">Segurança</h4>
+                    <div class="security-badges">
+                        <span><i class="fas fa-lock"></i> SSL Seguro</span>
+                        <span><i class="fas fa-shield-alt"></i> Site Protegido</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-trust-seals" role="list" aria-label="Selos de confiança">
+                <div class="trust-seal" role="listitem"><i class="fas fa-lock" aria-hidden="true"></i><span>Site<br>Seguro</span></div>
+                <div class="trust-seal" role="listitem"><i class="fas fa-shield-alt" aria-hidden="true"></i><span>Compra<br>Garantida</span></div>
+                <div class="trust-seal" role="listitem"><i class="fas fa-medal" aria-hidden="true"></i><span>Qualidade<br>1:1</span></div>
+                <div class="trust-seal" role="listitem"><i class="fas fa-undo" aria-hidden="true"></i><span>7 dias<br>Devolução</span></div>
+                <div class="trust-seal" role="listitem"><i class="fas fa-truck" aria-hidden="true"></i><span>Frete<br>Grátis*</span></div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Filho e Pai. Todos os direitos reservados.</p>
+                <a href="admin.html" class="admin-link" title="Painel Administrativo" aria-label="Painel Administrativo"><i class="fas fa-cog"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/5511984270638" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+        <span class="wpp-tooltip">Precisa de ajuda?</span>
+    </a>
+    <button class="back-to-top" id="backToTop" aria-label="Voltar ao topo">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script src="catalogo.js?v=20260601v8"></script>
+    <script src="script.js?v=20260601v8"></script>
+    <script>
+        // View toggle
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.view-btn').forEach(b => {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-pressed', 'false');
+                });
+                this.classList.add('active');
+                this.setAttribute('aria-pressed', 'true');
+                const view = this.dataset.view;
+                const grid = document.getElementById('tenisCatalogGrid');
+                if (grid) {
+                    grid.classList.toggle('list-view', view === 'list');
+                }
+            });
+        });
+
+        // Brand tags
+        document.querySelectorAll('.brand-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                document.querySelectorAll('.brand-tag').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Sidebar options with filtering
+        document.querySelectorAll('.sidebar-option[data-filter]').forEach(opt => {
+            opt.addEventListener('click', function() {
+                const section = this.closest('.sidebar-options');
+                if (section) {
+                    section.querySelectorAll('.sidebar-option').forEach(o => o.classList.remove('active'));
+                }
+                this.classList.add('active');
+
+                const filter = this.dataset.filter;
+                const grid = document.getElementById('tenisCatalogGrid');
+                const countEl = document.getElementById('tenisCount');
+                if (!grid) return;
+
+                let visible = 0;
+                grid.querySelectorAll('.product-card').forEach(card => {
+                    const show = filter === 'all'
+                        || card.dataset.category === filter
+                        || card.dataset.kind === filter
+                        || card.dataset.group === filter;
+                    card.style.display = show ? '' : 'none';
+                    if (show) visible++;
+                });
+                if (countEl) countEl.textContent = visible;
+
+                // Sync quick-nav
+                document.querySelectorAll('.quick-nav-item[data-filter]').forEach(n => {
+                    n.classList.toggle('active', n.dataset.filter === filter);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

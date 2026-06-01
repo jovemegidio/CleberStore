@@ -1,129 +1,583 @@
 ﻿<!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Promoções | Filho e Pai</title>
-    <meta name="description" content="Aproveite as promoções da Filho e Pai. Camisas com até 13% de desconto!">
-    <link rel="stylesheet" href="styles.css?v=20260210v7">
+    <title>Filho e Pai | Store: Promoções</title>
+    <meta name="description" content="Promoções imperdíveis da Filho e Pai. Tênis importados premium com até 18% de desconto. Aproveite enquanto durar o estoque!">
+    <meta name="theme-color" content="#0057b8">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="stylesheet" href="styles.css?v=20260601v8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="apple-touch-icon" href="favicon.png">
-    <meta name="theme-color" content="#111">
+    <style>
+        /* ---- PAGE-SPECIFIC: PROMOÇÕES ---- */
+        .promo-hero {
+            background: var(--black);
+            padding: 60px 0 50px;
+            position: relative;
+            overflow: hidden;
+        }
+        .promo-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 80% 80%, rgba(0,87,184,0.15) 0%, transparent 55%),
+                        radial-gradient(ellipse at 15% 30%, rgba(0,87,184,0.10) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .promo-hero-inner {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 40px;
+            align-items: center;
+        }
+        .promo-hero .breadcrumb { margin-bottom: 18px; }
+        .promo-hero .breadcrumb a,
+        .promo-hero .breadcrumb i { color: rgba(255,255,255,0.45); }
+        .promo-hero .breadcrumb span { color: rgba(255,255,255,0.75); }
+
+        .promo-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            border-radius: var(--radius-full);
+            margin-bottom: 16px;
+        }
+
+        .promo-hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(38px, 6vw, 72px);
+            font-weight: 900;
+            color: #fff;
+            line-height: 0.95;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+        .promo-hero-title span { color: var(--accent); }
+
+        .promo-hero-sub {
+            font-size: 15px;
+            color: rgba(255,255,255,0.55);
+            max-width: 480px;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .promo-hero-perks {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .hero-perk {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.65);
+            font-weight: 500;
+        }
+        .hero-perk i { color: var(--accent); font-size: 11px; }
+
+        /* COUNTDOWN PANEL */
+        .promo-countdown-panel {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius-lg);
+            padding: 28px 32px;
+            text-align: center;
+            flex-shrink: 0;
+            min-width: 220px;
+        }
+        .countdown-eyebrow {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.45);
+            margin-bottom: 16px;
+            display: block;
+        }
+        .countdown-grid {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+        }
+        .countdown-box {
+            background: rgba(255,255,255,0.08);
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            min-width: 52px;
+        }
+        .countdown-box span {
+            display: block;
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 900;
+            color: #fff;
+            line-height: 1;
+        }
+        .countdown-box small {
+            display: block;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: rgba(255,255,255,0.45);
+            margin-top: 4px;
+            font-weight: 600;
+        }
+        .countdown-sep {
+            font-size: 22px;
+            font-weight: 900;
+            color: rgba(255,255,255,0.3);
+        }
+        .countdown-bottom-text {
+            margin-top: 14px;
+            font-size: 11px;
+            color: rgba(255,255,255,0.4);
+        }
+        .countdown-bottom-text strong { color: #fff; }
+
+        /* SAVINGS CARDS */
+        .savings-strip {
+            background: var(--surface);
+            padding: 20px 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        .savings-inner {
+            display: flex;
+            gap: 0;
+            justify-content: center;
+        }
+        .saving-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 28px;
+            border-right: 1px solid var(--gray-200);
+        }
+        .saving-item:last-child { border-right: none; }
+        .saving-item i {
+            font-size: 18px;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+        .saving-item .si-text { display: flex; flex-direction: column; gap: 1px; }
+        .saving-item .si-label { font-size: 10px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 600; }
+        .saving-item .si-value { font-size: 15px; font-weight: 800; color: var(--gray-700); letter-spacing: -0.3px; }
+
+        /* FILTER BAR */
+        .promo-filter-bar {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 14px 0;
+            position: sticky;
+            top: calc(var(--header-h));
+            z-index: 100;
+        }
+        .promo-filter-inner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .filter-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            flex-shrink: 0;
+        }
+        .filter-chips {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+        .filter-chip {
+            padding: 6px 14px;
+            border-radius: var(--radius-full);
+            border: 1.5px solid var(--gray-200);
+            background: var(--card-bg);
+            color: var(--gray-600);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .filter-chip:hover { border-color: var(--accent); color: var(--accent); }
+        .filter-chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+        .filter-sort {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .filter-sort label { font-size: 11px; color: var(--gray-500); font-weight: 600; }
+        .filter-sort select {
+            font-size: 12px;
+            border: 1.5px solid var(--gray-200);
+            background: var(--card-bg);
+            color: var(--gray-700);
+            padding: 5px 10px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font);
+            cursor: pointer;
+        }
+
+        .promo-section { padding: 40px 0 60px; }
+
+        .promo-grid-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        .promo-grid-title {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--gray-700);
+            text-transform: uppercase;
+            letter-spacing: -0.3px;
+        }
+        .promo-grid-title span { color: var(--accent); }
+        .promo-count {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+        .promo-count strong { color: var(--gray-700); font-weight: 700; }
+
+        @media (max-width: 900px) {
+            .promo-hero-inner { grid-template-columns: 1fr; }
+            .promo-countdown-panel { display: none; }
+        }
+        @media (max-width: 768px) {
+            .savings-inner { flex-wrap: wrap; gap: 0; }
+            .saving-item { padding: 8px 16px; border-right: none; border-bottom: 1px solid var(--gray-200); width: 50%; }
+            .saving-item:nth-child(odd) { border-right: 1px solid var(--gray-200); }
+        }
+        @media (max-width: 480px) {
+            .promo-hero-title { font-size: 34px; }
+            .promo-hero { padding: 40px 0 36px; }
+            .saving-item { width: 100%; border-right: none !important; }
+        }
+    </style>
 </head>
 <body>
-
-    <div class="top-bar"><div class="container top-bar-content"><div class="top-bar-left"><span><i class="fas fa-truck"></i> Frete grátis acima de R$ 299,90</span><span class="top-bar-divider">|</span><span><i class="fas fa-shield-alt"></i> Compra 100% segura</span><span class="top-bar-divider">|</span><span><i class="fab fa-pix"></i> 5% OFF no PIX</span></div><div class="top-bar-right"><a href="https://wa.me/5511984270638" target="_blank"><i class="fab fa-whatsapp"></i> (11) 98427-0638</a><span class="top-bar-divider">|</span><a href="https://www.instagram.com/filhoepai" target="_blank"><i class="fab fa-instagram"></i> @filhoepai</a></div></div></div>
-
-    <header class="header" id="header">
-        <div class="container header-content">
-            <button class="mobile-hamburger" id="mobileHamburger" aria-label="Menu"><span></span><span></span><span></span></button>
-            <a href="index.html" class="logo"><img src="Cleber Store.png" alt="Filho e Pai" class="logo-img"></a>
-            <div class="search-bar" id="searchBar"><i class="fas fa-search search-icon-left"></i><input type="text" placeholder="O que você está procurando?" id="searchInput" autocomplete="off"><button class="search-btn" aria-label="Buscar"><i class="fas fa-arrow-right"></i></button></div>
-            <div class="header-actions">
-                <a href="conta.html" class="header-action-item" id="accountBtn"><i class="far fa-user"></i><div class="action-text"><span class="action-label">Olá, faça seu</span><strong>Login</strong></div></a>
-                <a href="#" class="header-action-item wishlist-action" id="wishlistBtn"><i class="far fa-heart"></i><span class="action-count" id="wishlistCount">0</span></a>
-                <a href="#" class="header-action-item cart-action" id="cartBtn"><i class="fas fa-shopping-bag"></i><span class="cart-badge" id="cartBadge">0</span><div class="action-text"><span class="action-label">Minha</span><strong>Sacola</strong></div></a>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <span><i class="fas fa-truck"></i> Frete grátis acima de R$ 299,90</span>
+                <span class="top-bar-divider">|</span>
+                <span><i class="fas fa-shield-alt"></i> Compra 100% segura</span>
+                <span class="top-bar-divider">|</span>
+                <span><i class="fab fa-pix"></i> 5% OFF no PIX</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://wa.me/5511984270638" target="_blank"><i class="fab fa-whatsapp"></i> (11) 98427-0638</a>
+                <span class="top-bar-divider">|</span>
+                <a href="https://www.instagram.com/paiefilhoimportss" target="_blank"><i class="fab fa-instagram"></i> @paiefilhoimportss</a>
             </div>
         </div>
-        <nav class="main-nav" id="mainNav"><div class="container"><ul class="nav-list">
-            <li class="nav-item"><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
-            <li class="nav-item"><a href="todos-produtos.html">Todos os Tênis</a></li>
-            <li class="nav-item highlight"><a href="lancamentos.html"><span class="nav-pulse"></span>🔥 Lançamentos</a></li>
-            <li class="nav-item"><a href="camisas-selecao.html">Nike Air Max</a></li>
-            <li class="nav-item"><a href="modelo-jogador.html">Air Force 1</a></li>
-            <li class="nav-item"><a href="modelo-torcedor.html">Jordan</a></li>
-            <li class="nav-item sale active"><a href="promocoes.html"><i class="fas fa-tag"></i> Promoções</a></li>
-        </ul></div></nav>
-    </header>
+    </div>
 
-    <!-- PAGE HERO -->
-    <section class="page-hero page-hero-sale">
-        <div class="container">
-            <nav class="breadcrumb"><a href="index.html">Início</a><i class="fas fa-chevron-right"></i><span>Promoções</span></nav>
-            <h1 class="page-title">🏷️ Promoções</h1>
-            <p class="page-subtitle">Ofertas imperdíveis com descontos de até 13%. Aproveite antes que acabem!</p>
+    <!-- HEADER -->
+    <header class="header" id="header">
+        <div class="container header-content">
+            <button class="mobile-hamburger" id="mobileHamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+            <a href="index.html" class="logo">
+                <img src="logo-principal.png?v=20260601-logo" alt="Filho e Pai" class="logo-img">
+            </a>
+            <div class="search-bar" id="searchBar">
+                <i class="fas fa-search search-icon-left"></i>
+                <input type="text" placeholder="O que você está procurando?" id="searchInput" autocomplete="off" aria-label="Buscar produtos">
+                <button class="search-btn" aria-label="Buscar"><i class="fas fa-arrow-right"></i></button>
+            </div>
+            <div class="header-actions">
+                <a href="conta.html" class="header-action-item" id="accountBtn">
+                    <i class="far fa-user"></i>
+                    <div class="action-text"><span class="action-label">Olá, faça seu</span><strong>Login</strong></div>
+                </a>
+                <a href="#" class="header-action-item wishlist-action" id="wishlistBtn" aria-label="Lista de desejos">
+                    <i class="far fa-heart"></i><span class="action-count" id="wishlistCount">0</span>
+                </a>
+                <a href="#" class="header-action-item cart-action" id="cartBtn" aria-label="Minha sacola">
+                    <i class="fas fa-shopping-bag"></i><span class="cart-badge" id="cartBadge">0</span>
+                    <div class="action-text"><span class="action-label">Minha</span><strong>Sacola</strong></div>
+                </a>
+            </div>
         </div>
-    </section>
+        <nav class="main-nav" id="mainNav" aria-label="Navegação principal">
+            <div class="container">
+                <ul class="nav-list" role="list">
+                    <li class="nav-item"><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
+                    <li class="nav-item"><a href="todos-produtos.html">Todos os Tênis</a></li>
+                    <li class="nav-item highlight"><a href="lancamentos.html"><span class="nav-pulse"></span><i class="fas fa-fire"></i> Lançamentos</a></li>
+                    <li class="nav-item"><a href="camisas-selecao.html">Nike Air Max</a></li>
+                    <li class="nav-item"><a href="modelo-jogador.html">Air Force 1</a></li>
+                    <li class="nav-item"><a href="modelo-torcedor.html">Jordan</a></li>
+                    <li class="nav-item sale active"><a href="promocoes.html"><i class="fas fa-tag"></i> Promoções</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="mobile-overlay" id="mobileOverlay"></div>
 
-    <!-- PROMO BANNER -->
-    <section class="promo-banner-section">
-        <div class="container">
-            <div class="promo-highlight-card">
-                <div class="promo-highlight-content">
-                    <span class="promo-label"><i class="fas fa-bolt"></i> OFERTA RELÂMPAGO</span>
-                    <h2>Até <span class="promo-percent">13% OFF</span> em camisas selecionadas</h2>
-                    <p>+ 5% adicional no PIX · Parcele em 2x sem juros</p>
+    <main id="main-content">
+        <!-- HERO -->
+        <section class="promo-hero" aria-labelledby="promo-heading">
+            <div class="container">
+                <div class="promo-hero-inner">
+                    <div class="promo-hero-left">
+                        <nav class="breadcrumb" aria-label="Breadcrumb">
+                            <a href="index.html">Início</a>
+                            <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                            <span aria-current="page">Promoções</span>
+                        </nav>
+                        <div class="promo-hero-badge"><i class="fas fa-bolt"></i> Oferta relâmpago</div>
+                        <h1 class="promo-hero-title" id="promo-heading">
+                            Até <span>18% OFF</span><br>em selecionados
+                        </h1>
+                        <p class="promo-hero-sub">Desconto aplicado automaticamente no carrinho. Estoque limitado — aproveite enquanto durar!</p>
+                        <div class="promo-hero-perks">
+                            <span class="hero-perk"><i class="fas fa-check-circle"></i> Parcele em 2x sem juros</span>
+                            <span class="hero-perk"><i class="fas fa-check-circle"></i> +5% no PIX</span>
+                            <span class="hero-perk"><i class="fas fa-check-circle"></i> Frete grátis acima de R$ 299,90</span>
+                        </div>
+                    </div>
+                    <div class="promo-countdown-panel" role="timer" aria-label="Tempo restante da oferta">
+                        <span class="countdown-eyebrow"><i class="fas fa-clock"></i> Oferta expira em</span>
+                        <div class="countdown-grid">
+                            <div class="countdown-box">
+                                <span id="promoHours">23</span>
+                                <small>horas</small>
+                            </div>
+                            <span class="countdown-sep">:</span>
+                            <div class="countdown-box">
+                                <span id="promoMinutes">59</span>
+                                <small>min</small>
+                            </div>
+                            <span class="countdown-sep">:</span>
+                            <div class="countdown-box">
+                                <span id="promoSeconds">59</span>
+                                <small>seg</small>
+                            </div>
+                        </div>
+                        <p class="countdown-bottom-text">Renova <strong>diariamente</strong> às 00h</p>
+                    </div>
                 </div>
-                <div class="promo-timer-wrap">
-                    <span class="promo-timer-label">A oferta expira em:</span>
-                    <div class="promo-countdown" id="promoCountdown">
-                        <div class="countdown-unit"><span id="promoHours">23</span><small>horas</small></div>
-                        <div class="countdown-separator">:</div>
-                        <div class="countdown-unit"><span id="promoMinutes">59</span><small>min</small></div>
-                        <div class="countdown-separator">:</div>
-                        <div class="countdown-unit"><span id="promoSeconds">59</span><small>seg</small></div>
+            </div>
+        </section>
+
+        <!-- SAVINGS STRIP -->
+        <div class="savings-strip" role="complementary" aria-label="Vantagens das promoções">
+            <div class="container savings-inner">
+                <div class="saving-item">
+                    <i class="fas fa-percent" aria-hidden="true"></i>
+                    <div class="si-text">
+                        <span class="si-label">Desconto máximo</span>
+                        <span class="si-value">Até 18% OFF</span>
+                    </div>
+                </div>
+                <div class="saving-item">
+                    <i class="fab fa-pix" aria-hidden="true"></i>
+                    <div class="si-text">
+                        <span class="si-label">Desconto PIX</span>
+                        <span class="si-value">+5% OFF</span>
+                    </div>
+                </div>
+                <div class="saving-item">
+                    <i class="fas fa-credit-card" aria-hidden="true"></i>
+                    <div class="si-text">
+                        <span class="si-label">Parcelamento</span>
+                        <span class="si-value">2x sem juros</span>
+                    </div>
+                </div>
+                <div class="saving-item">
+                    <i class="fas fa-truck" aria-hidden="true"></i>
+                    <div class="si-text">
+                        <span class="si-label">Entrega</span>
+                        <span class="si-value">Frete grátis*</span>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- PRODUCTS -->
-    <section class="catalog-section">
-        <div class="container">
-            <div class="catalog-toolbar">
-                <div class="catalog-count"><span>4</span> produtos em promoção</div>
-            </div>
+        <!-- PRODUCTS -->
+        <section class="promo-section">
+            <div class="container">
+                <!-- FILTER BAR -->
+                <div class="promo-filter-bar">
+                    <div class="promo-filter-inner">
+                        <span class="filter-label"><i class="fas fa-sliders-h"></i> Filtrar:</span>
+                        <div class="filter-chips" role="group" aria-label="Filtros">
+                            <button class="filter-chip active" data-filter="all" aria-pressed="true">Todos</button>
+                            <button class="filter-chip" data-filter="nike" aria-pressed="false">Nike</button>
+                            <button class="filter-chip" data-filter="jordan" aria-pressed="false">Jordan</button>
+                            <button class="filter-chip" data-filter="asics" aria-pressed="false">Asics</button>
+                        </div>
+                        <div class="filter-sort">
+                            <label for="promoSort">Ordenar:</label>
+                            <select id="promoSort" aria-label="Ordenar produtos">
+                                <option value="desconto">Maior desconto</option>
+                                <option value="menor-preco">Menor preço</option>
+                                <option value="maior-preco">Maior preço</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="products-grid catalog-grid" data-catalog="promocoes">
-                <!-- Carregado dinamicamente por catalogo.js -->
+                <div class="promo-grid-header">
+                    <h2 class="promo-grid-title">Produtos em <span>Promoção</span></h2>
+                    <p class="promo-count"><strong id="promoCount">4</strong> ofertas disponíveis</p>
+                </div>
+
+                <div class="products-grid catalog-grid" id="promosGrid" data-catalog="promocoes" role="list" aria-label="Produtos em promoção">
+                    <!-- Carregado por catalogo.js -->
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <!-- FOOTER -->
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <div class="container">
             <div class="footer-top">
-                <div class="footer-col footer-about"><a href="index.html" class="footer-logo"><img src="Logo CS - Rodapé.png" alt="Filho e Pai" class="logo-img footer-logo-img"></a><p>Tênis importados premium com qualidade e conforto excepcionais.</p><div class="footer-socials"><a href="https://www.instagram.com/filhoepai" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="https://wa.me/5511984270638" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a><a href="https://www.tiktok.com/@filhoepai" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a><a href="https://www.youtube.com/@filhoepai" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a></div></div>
-                <div class="footer-col"><h4>Navegação</h4><ul><li><a href="index.html">Início</a></li><li><a href="todos-produtos.html">Todos os Tênis</a></li><li><a href="camisas-selecao.html">Nike Air Max</a></li><li><a href="modelo-jogador.html">Air Force 1</a></li><li><a href="modelo-torcedor.html">Jordan</a></li><li><a href="promocoes.html">Promoções</a></li></ul></div>
-                <div class="footer-col"><h4>Institucional</h4><ul><li><a href="sobre-nos.html">Sobre Nós</a></li><li><a href="politica-privacidade.html">Política de Privacidade</a></li><li><a href="termos-uso.html">Termos de Uso</a></li><li><a href="trocas-devolucoes.html">Trocas e Devoluções</a></li><li><a href="perguntas-frequentes.html">Perguntas Frequentes</a></li></ul></div>
-                <div class="footer-col"><h4>Atendimento</h4><ul class="contact-list"><li><a href="mailto:bruno.teles2@icloud.com"><i class="fas fa-envelope"></i> bruno.teles2@icloud.com</a></li><li><a href="https://wa.me/5511984270638"><i class="fab fa-whatsapp"></i> (11) 98427-0638</a></li><li><i class="fas fa-clock"></i> Seg a Sex: 9h às 18h</li></ul><h4 class="mt-20">Pagamento</h4><div class="payment-methods"><span class="payment-icon" title="Mastercard"><i class="fab fa-cc-mastercard"></i></span><span class="payment-icon" title="Visa"><i class="fab fa-cc-visa"></i></span><span class="payment-icon" title="PIX"><i class="fab fa-pix"></i></span><span class="payment-icon" title="Boleto"><i class="fas fa-barcode"></i></span></div></div>
+                <div class="footer-col footer-about">
+                    <a href="index.html" class="footer-logo" aria-label="Filho e Pai — página inicial">
+                        <img src="logo-rodape.png?v=20260601-logo" alt="Filho e Pai" class="logo-img footer-logo-img">
+                    </a>
+                    <p>Tênis importados premium: Nike Air Max TN, Air Force 1, Jordan, Asics e Mizuno. Qualidade e conforto excepcionais para todo o Brasil.</p>
+                    <div class="footer-socials" aria-label="Redes sociais">
+                        <a href="https://www.instagram.com/paiefilhoimportss" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/5511984270638" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://www.tiktok.com/@filhoepai" target="_blank" rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://www.youtube.com/@filhoepai" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Navegação</h4>
+                    <ul>
+                        <li><a href="index.html">Início</a></li>
+                        <li><a href="todos-produtos.html">Todos os Tênis</a></li>
+                        <li><a href="lancamentos.html">Lançamentos</a></li>
+                        <li><a href="camisas-selecao.html">Nike Air Max</a></li>
+                        <li><a href="modelo-jogador.html">Air Force 1</a></li>
+                        <li><a href="modelo-torcedor.html">Jordan</a></li>
+                        <li><a href="promocoes.html">Promoções</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Institucional</h4>
+                    <ul>
+                        <li><a href="sobre-nos.html">Sobre Nós</a></li>
+                        <li><a href="guia-tamanhos.html">Guia de Tamanhos</a></li>
+                        <li><a href="rastreamento.html">Rastrear Pedido</a></li>
+                        <li><a href="politica-privacidade.html">Política de Privacidade</a></li>
+                        <li><a href="termos-uso.html">Termos de Uso</a></li>
+                        <li><a href="trocas-devolucoes.html">Trocas e Devoluções</a></li>
+                        <li><a href="perguntas-frequentes.html">Perguntas Frequentes</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Atendimento</h4>
+                    <ul class="contact-list">
+                        <li><a href="mailto:bruno.teles2@icloud.com"><i class="fas fa-envelope"></i> bruno.teles2@icloud.com</a></li>
+                        <li><a href="https://wa.me/5511984270638"><i class="fab fa-whatsapp"></i> (11) 98427-0638</a></li>
+                        <li><i class="fas fa-clock"></i> Seg a Sex: 9h às 18h</li>
+                    </ul>
+                    <h4 class="mt-20">Pagamento</h4>
+                    <div class="payment-methods" aria-label="Formas de pagamento">
+                        <span class="payment-icon" title="Mastercard"><i class="fab fa-cc-mastercard"></i></span>
+                        <span class="payment-icon" title="Visa"><i class="fab fa-cc-visa"></i></span>
+                        <span class="payment-icon" title="Amex"><i class="fab fa-cc-amex"></i></span>
+                        <span class="payment-icon" title="PIX"><i class="fab fa-pix"></i></span>
+                        <span class="payment-icon" title="Boleto"><i class="fas fa-barcode"></i></span>
+                        <span class="payment-icon" title="Elo"><i class="fas fa-credit-card"></i></span>
+                    </div>
+                    <h4 class="mt-20">Segurança</h4>
+                    <div class="security-badges">
+                        <span><i class="fas fa-lock"></i> SSL Seguro</span>
+                        <span><i class="fas fa-shield-alt"></i> Site Protegido</span>
+                    </div>
+                </div>
             </div>
-            <div class="footer-bottom"><p>&copy; 2026 Filho e Pai. Todos os direitos reservados.</p></div>
+            <div class="footer-trust-seals" role="list" aria-label="Selos de confiança">
+                <div class="trust-seal" role="listitem"><i class="fas fa-lock" aria-hidden="true"></i><span>Site<br>Seguro</span></div>
+                <div class="trust-seal" role="listitem"><i class="fas fa-shield-alt" aria-hidden="true"></i><span>Compra<br>Garantida</span></div>
+                <div class="trust-seal" role="listitem"><i class="fas fa-medal" aria-hidden="true"></i><span>Qualidade<br>1:1</span></div>
+                <div class="trust-seal" role="listitem"><i class="fas fa-undo" aria-hidden="true"></i><span>7 dias<br>Devolução</span></div>
+                <div class="trust-seal" role="listitem"><i class="fas fa-truck" aria-hidden="true"></i><span>Frete<br>Grátis*</span></div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Filho e Pai. Todos os direitos reservados.</p>
+                <a href="admin.html" class="admin-link" title="Painel Administrativo" aria-label="Painel Administrativo"><i class="fas fa-cog"></i></a>
+            </div>
         </div>
     </footer>
 
-    <a href="https://wa.me/5511984270638" class="whatsapp-float" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i><span class="wpp-tooltip">Precisa de ajuda?</span></a>
-    <button class="back-to-top" id="backToTop" aria-label="Voltar ao topo"><i class="fas fa-chevron-up"></i></button>
+    <a href="https://wa.me/5511984270638" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+        <span class="wpp-tooltip">Precisa de ajuda?</span>
+    </a>
+    <button class="back-to-top" id="backToTop" aria-label="Voltar ao topo">
+        <i class="fas fa-chevron-up"></i>
+    </button>
 
-    <script src="catalogo.js?v=20260210v7"></script>
-    <script src="script.js?v=20260210v7"></script>
+    <script src="catalogo.js?v=20260601v8"></script>
+    <script src="script.js?v=20260601v8"></script>
     <script>
-        // Promo countdown
-        function startPromoCountdown() {
+        // Countdown
+        (function() {
             const end = new Date();
-            end.setHours(end.getHours() + 24);
+            end.setHours(23, 59, 59, 0);
+            if (new Date() > end) end.setDate(end.getDate() + 1);
+
+            function pad(n) { return String(n).padStart(2, '0'); }
             function update() {
-                const now = new Date();
-                const diff = end - now;
-                if (diff <= 0) { end.setHours(end.getHours() + 24); }
-                const h = Math.floor(diff / 3600000);
-                const m = Math.floor((diff % 3600000) / 60000);
-                const s = Math.floor((diff % 60000) / 1000);
-                document.getElementById('promoHours').textContent = String(h).padStart(2, '0');
-                document.getElementById('promoMinutes').textContent = String(m).padStart(2, '0');
-                document.getElementById('promoSeconds').textContent = String(s).padStart(2, '0');
+                const diff = end - new Date();
+                if (diff <= 0) { end.setDate(end.getDate() + 1); return; }
+                document.getElementById('promoHours').textContent = pad(Math.floor(diff / 3600000));
+                document.getElementById('promoMinutes').textContent = pad(Math.floor((diff % 3600000) / 60000));
+                document.getElementById('promoSeconds').textContent = pad(Math.floor((diff % 60000) / 1000));
             }
             update();
             setInterval(update, 1000);
-        }
-        startPromoCountdown();
+        })();
+
+        // Filter chips
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                document.querySelectorAll('.filter-chip').forEach(c => {
+                    c.classList.remove('active');
+                    c.setAttribute('aria-pressed', 'false');
+                });
+                this.classList.add('active');
+                this.setAttribute('aria-pressed', 'true');
+            });
+        });
     </script>
 </body>
 </html>

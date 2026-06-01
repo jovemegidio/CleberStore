@@ -18,10 +18,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const storeConfig = {
         whatsapp: siteSettings.store?.whatsapp || '5511984270638',
-        instagram: siteSettings.store?.instagram || '@filhoepai',
+        instagram: siteSettings.store?.instagram || '@paiefilhoimportss',
         name: siteSettings.store?.name || 'Filho e Pai',
-        email: siteSettings.store?.email || 'bruno.teles2@icloud.com'
+        email: siteSettings.store?.email || ''
     };
+
+    // Dynamic page title: "Filho e Pai | Store: [página ou modal]"
+    const PAGE_NAMES = {
+        'index.html': '',
+        'todos-tenis.html': 'Todos os Tênis',
+        'todos-produtos.html': 'Todos os Tênis',
+        'lancamentos.html': 'Lançamentos',
+        'promocoes.html': 'Promoções',
+        'camisas-selecao.html': 'Nike Air Max',
+        'modelo-jogador.html': 'Air Force 1',
+        'modelo-torcedor.html': 'Jordan',
+        'produto.html': 'Produto',
+        'checkout.html': 'Checkout',
+        'conta.html': 'Minha Conta',
+        'rastreamento.html': 'Rastrear Pedido',
+        'sobre-nos.html': 'Sobre Nós',
+        'guia-tamanhos.html': 'Guia de Tamanhos',
+        'politica-privacidade.html': 'Política de Privacidade',
+        'termos-uso.html': 'Termos de Uso',
+        'trocas-devolucoes.html': 'Trocas e Devoluções',
+        'perguntas-frequentes.html': 'Perguntas Frequentes',
+    };
+    const BASE_TITLE = 'Filho e Pai | Store';
+    const currentPageFile = window.location.pathname.split('/').pop() || 'index.html';
+    const currentPageName = PAGE_NAMES[currentPageFile] ?? '';
+    document.title = currentPageName ? `${BASE_TITLE}: ${currentPageName}` : BASE_TITLE;
+
+    const setStoreTitle = (name) => {
+        document.title = name ? `${BASE_TITLE}: ${name}` : BASE_TITLE;
+    };
+    const restorePageTitle = () => setStoreTitle(currentPageName);
 
     const shippingConfig = {
         freeShipping: siteSettings.shipping?.freeShipping ?? 299.90,
@@ -55,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Apply top-bar dynamic values
     const topBarFrete = document.querySelector('.top-bar-left span:first-child');
-    if (topBarFrete) topBarFrete.innerHTML = `<i class="fas fa-truck"></i> Frete grátis acima de R$ ${shippingConfig.freeShipping.toFixed(2).replace('.', ',')}`;
+    if (topBarFrete) topBarFrete.innerHTML = `<i class="fas fa-truck"></i> Frete: consultar`;
 
     const topBarPix = document.querySelector('.top-bar-left span:last-child');
     if (topBarPix && topBarPix.textContent.includes('PIX')) {
@@ -97,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         link.href = `https://www.instagram.com/${igHandle}`;
     });
     document.querySelectorAll('.footer .contact-list a[href*="mailto"]').forEach(link => {
+        if (!storeConfig.email) { link.closest('li')?.remove(); return; }
         link.href = `mailto:${storeConfig.email}`;
         if (link.querySelector('i')) link.innerHTML = `<i class="fas fa-envelope"></i> ${storeConfig.email}`;
     });
@@ -465,7 +497,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="cart-item-img"><img src="${item.img || item.image}" alt="${item.name}"></div>
                     <div class="cart-item-details">
                         <div class="cart-item-name">${item.name}</div>
-                        <div class="cart-item-meta"><span class="cart-item-size">Tam: ${item.size || 'M'}</span></div>
+                        <div class="cart-item-meta"><span class="cart-item-size">Tam: ${item.size || '41'}</span></div>
                         <div class="cart-item-qty-row">
                             <div class="cart-qty-ctrl">
                                 <button class="cart-qty-btn" data-action="minus" data-index="${i}"><i class="fas fa-minus"></i></button>
@@ -545,11 +577,11 @@ document.addEventListener('DOMContentLoaded', () => {
             else numPrice = parseFloat(String(price).replace('R$','').replace(/\./g,'').replace(',','.').trim()) || 0;
 
             // Check if same product+size already in cart
-            const existing = items.find(item => item.name === name && item.size === (size || 'M'));
+            const existing = items.find(item => item.name === name && item.size === (size || '41'));
             if (existing) {
                 existing.qty = Math.min(10, (existing.qty || 1) + 1);
             } else {
-                items.push({ name, price: numPrice, img, size: size || 'M', qty: 1 });
+                items.push({ name, price: numPrice, img, size: size || '41', qty: 1 });
             }
             saveCart();
             updateUI();
@@ -603,7 +635,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const unitVal = typeof item.price === 'number' ? item.price : parseFloat(String(item.price).replace('R$','').replace(/\./g,'').replace(',','.').trim()) || 0;
                 const qty = item.qty || 1;
                 msg += `📦 *${i + 1}. ${item.name}*\n`;
-                msg += `   📏 Tamanho: ${item.size || 'M'}\n`;
+                msg += `   📏 Tamanho: ${item.size || '41'}\n`;
                 msg += `   🔢 Quantidade: ${qty}\n`;
                 msg += `   💰 Valor: ${fmtBRL(unitVal * qty)}\n\n`;
             });
@@ -650,7 +682,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const name = card.querySelector('.product-name a')?.textContent || 'Produto';
         const price = card.querySelector('.price-current')?.textContent || 'R$ 0,00';
         const img = card.querySelector('.product-image')?.src || '';
-        const size = card.querySelector('.size-opt.active')?.textContent || 'M';
+        const size = card.querySelector('.size-opt.active')?.textContent || '41';
 
         // Button animation
         const originalHTML = btn.innerHTML;
@@ -711,13 +743,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 const cards = grid.querySelectorAll('.product-card');
 
                 cards.forEach((card, i) => {
-                    const category = card.dataset.category;
-                    const show = filter === 'all' || category === filter;
+                    const show = filter === 'all'
+                        || card.dataset.category === filter
+                        || card.dataset.kind === filter
+                        || card.dataset.group === filter;
 
                     card.style.transition = 'all 0.4s ease';
                     card.style.opacity = show ? '1' : '0';
                     card.style.transform = show ? 'scale(1)' : 'scale(0.8)';
                     card.style.pointerEvents = show ? '' : 'none';
+                    card.style.display = show ? '' : 'none';
 
                     if (show) {
                         card.style.transitionDelay = `${i * 0.05}s`;
@@ -830,7 +865,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update WhatsApp link
             const qvWA = document.getElementById('qvWhatsApp');
             if (qvWA) {
-                const size = modal.querySelector('.size-opt.active')?.textContent || 'M';
+                const size = modal.querySelector('.size-opt.active')?.textContent || '41';
                 let msg = `Olá! 😊 Tenho interesse em:\n\n`;
                 msg += `⚽ *${name}*\n`;
                 msg += `📏 Tamanho: *${size}*\n`;
@@ -839,6 +874,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 qvWA.href = `https://wa.me/${storeConfig.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`;
             }
 
+            setStoreTitle(name || 'Visualizar Produto');
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
@@ -846,6 +882,7 @@ document.addEventListener('DOMContentLoaded', () => {
         function closeModal() {
             modal.classList.remove('active');
             document.body.style.overflow = '';
+            restorePageTitle();
         }
 
         document.addEventListener('click', (e) => {
@@ -892,7 +929,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const priceEl = qvPrices?.querySelector('.price-current');
             const price = priceEl?.textContent || 'R$ 0,00';
             const img = qvImage?.src || '';
-            const size = modal.querySelector('.size-opt.active')?.textContent || 'M';
+            const size = modal.querySelector('.size-opt.active')?.textContent || '41';
 
             cart.add(name, price, img, size);
             closeModal();
@@ -956,5 +993,49 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    console.log('🏆 Filho e Pai - Site carregado com sucesso!');
+    // ==========================================
+    // DARK MODE TOGGLE
+    // ==========================================
+    (() => {
+        const html = document.documentElement;
+        // Light mode is always the default; only override if user explicitly set a preference
+        const stored = localStorage.getItem('cs_theme') || 'light';
+        html.setAttribute('data-theme', stored);
+
+        const btn = document.createElement('button');
+        btn.className = 'theme-toggle';
+        btn.setAttribute('aria-label', 'Alternar modo escuro');
+        btn.title = 'Alternar modo escuro';
+        btn.innerHTML = '<i class="fas fa-moon"></i>';
+
+        const headerActions = document.querySelector('.header-actions');
+        if (headerActions) headerActions.prepend(btn);
+
+        function updateIcon() {
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            btn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            btn.setAttribute('aria-label', isDark ? 'Ativar modo claro' : 'Ativar modo escuro');
+        }
+        updateIcon();
+
+        btn.addEventListener('click', () => {
+            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('cs_theme', next);
+            updateIcon();
+        });
+    })();
+
+    // ==========================================
+    // SKIP-TO-CONTENT LINK
+    // ==========================================
+    (() => {
+        const skip = document.createElement('a');
+        skip.href = '#main-content';
+        skip.className = 'skip-link';
+        skip.textContent = 'Ir para o conteúdo principal';
+        document.body.prepend(skip);
+    })();
+
+    console.log('Filho e Pai - Site carregado com sucesso!');
 });

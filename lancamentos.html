@@ -1,19 +1,233 @@
 ﻿<!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 Lançamentos | Filho e Pai</title>
-    <meta name="description" content="Confira os lançamentos mais recentes da Filho e Pai. Camisas 2025/2026 acabaram de chegar!">
-    <link rel="stylesheet" href="styles.css?v=20260210v7">
+    <title>Filho e Pai | Store: Lançamentos</title>
+    <meta name="description" content="Os lançamentos mais recentes da Filho e Pai. Tênis importados premium acabaram de chegar — Nike, Jordan, Asics e mais.">
+    <meta name="theme-color" content="#0057b8">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="stylesheet" href="styles.css?v=20260601v8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="apple-touch-icon" href="favicon.png">
-    <meta name="theme-color" content="#111">
+    <style>
+        /* ---- PAGE-SPECIFIC: LANÇAMENTOS ---- */
+        .lanc-hero {
+            background: var(--black);
+            padding: 60px 0 50px;
+            position: relative;
+            overflow: hidden;
+        }
+        .lanc-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 10% 90%, rgba(0,87,184,0.18) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 20%, rgba(0,87,184,0.10) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .lanc-hero-inner {
+            position: relative;
+            z-index: 1;
+        }
+        .lanc-hero .breadcrumb { margin-bottom: 18px; }
+        .lanc-hero .breadcrumb a,
+        .lanc-hero .breadcrumb i { color: rgba(255,255,255,0.45); }
+        .lanc-hero .breadcrumb span { color: rgba(255,255,255,0.75); }
+
+        .lanc-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            border-radius: var(--radius-full);
+            margin-bottom: 16px;
+        }
+        .lanc-badge i { font-size: 10px; }
+
+        .lanc-title {
+            font-family: var(--font-display);
+            font-size: clamp(38px, 6vw, 72px);
+            font-weight: 900;
+            color: #fff;
+            line-height: 0.95;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+        .lanc-title span { color: var(--accent); }
+
+        .lanc-subtitle {
+            font-size: 15px;
+            color: rgba(255,255,255,0.55);
+            max-width: 520px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .lanc-stats {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+        .lanc-stat {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .lanc-stat strong {
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+            font-family: var(--font-display);
+            letter-spacing: -0.5px;
+        }
+        .lanc-stat span {
+            font-size: 11px;
+            color: rgba(255,255,255,0.45);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 500;
+        }
+
+        /* NEW ARRIVALS STRIP */
+        .new-arrivals-strip {
+            background: var(--accent);
+            padding: 10px 0;
+            overflow: hidden;
+        }
+        .new-arrivals-track {
+            display: flex;
+            gap: 48px;
+            animation: marquee 20s linear infinite;
+            white-space: nowrap;
+        }
+        .new-arrivals-track span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        .new-arrivals-track span i { font-size: 9px; opacity: 0.7; }
+
+        /* FILTER BAR */
+        .lanc-filter-bar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 14px 0;
+            position: sticky;
+            top: calc(var(--header-h) + 0px);
+            z-index: 100;
+        }
+        .lanc-filter-inner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .lanc-filter-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            flex-shrink: 0;
+        }
+        .filter-chips {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+        .filter-chip {
+            padding: 6px 14px;
+            border-radius: var(--radius-full);
+            border: 1.5px solid var(--gray-200);
+            background: var(--card-bg);
+            color: var(--gray-600);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .filter-chip:hover { border-color: var(--accent); color: var(--accent); }
+        .filter-chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+        .lanc-count {
+            margin-left: auto;
+            font-size: 12px;
+            color: var(--gray-500);
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+        .lanc-count span { font-weight: 700; color: var(--gray-700); }
+
+        /* GRID */
+        .lanc-section { padding: 40px 0 60px; }
+
+        /* NEW BADGE on cards */
+        .product-badge.new-arrival {
+            background: var(--accent);
+            color: #fff;
+            font-weight: 800;
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 64px 24px;
+            color: var(--gray-500);
+        }
+        .empty-state i { font-size: 48px; opacity: 0.3; margin-bottom: 16px; }
+        .empty-state h3 { font-size: 18px; font-weight: 700; color: var(--gray-700); margin-bottom: 8px; }
+        .empty-state p { font-size: 14px; }
+
+        /* INFO BANNER */
+        .lanc-info-banner {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            border-radius: var(--radius-lg);
+            padding: 28px 36px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 40px;
+            color: #fff;
+        }
+        .lanc-info-banner .banner-left { display: flex; flex-direction: column; gap: 6px; }
+        .lanc-info-banner .banner-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.75; }
+        .lanc-info-banner .banner-title { font-family: var(--font-display); font-size: 28px; font-weight: 900; letter-spacing: -0.5px; line-height: 1; text-transform: uppercase; }
+        .lanc-info-banner .banner-sub { font-size: 13px; opacity: 0.75; margin-top: 2px; }
+        .lanc-info-banner .banner-right { display: flex; gap: 20px; flex-shrink: 0; }
+        .banner-perk { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .banner-perk i { font-size: 20px; }
+        .banner-perk span { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; opacity: 0.85; }
+
+        @media (max-width: 768px) {
+            .lanc-info-banner { flex-direction: column; padding: 22px 20px; gap: 18px; }
+            .lanc-info-banner .banner-right { width: 100%; justify-content: space-around; }
+            .lanc-stats { gap: 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .lanc-title { font-size: 34px; }
+            .lanc-hero { padding: 40px 0 36px; }
+        }
+    </style>
 </head>
 <body>
     <!-- TOP BAR -->
@@ -29,7 +243,7 @@
             <div class="top-bar-right">
                 <a href="https://wa.me/5511984270638" target="_blank"><i class="fab fa-whatsapp"></i> (11) 98427-0638</a>
                 <span class="top-bar-divider">|</span>
-                <a href="https://www.instagram.com/filhoepai" target="_blank"><i class="fab fa-instagram"></i> @filhoepai</a>
+                <a href="https://www.instagram.com/paiefilhoimportss" target="_blank"><i class="fab fa-instagram"></i> @paiefilhoimportss</a>
             </div>
         </div>
     </div>
@@ -41,25 +255,33 @@
                 <span></span><span></span><span></span>
             </button>
             <a href="index.html" class="logo">
-                <img src="Cleber Store.png" alt="Filho e Pai" class="logo-img">
+                <img src="logo-principal.png?v=20260601-logo" alt="Filho e Pai" class="logo-img">
             </a>
             <div class="search-bar" id="searchBar">
                 <i class="fas fa-search search-icon-left"></i>
-                <input type="text" placeholder="O que você está procurando?" id="searchInput" autocomplete="off">
+                <input type="text" placeholder="O que você está procurando?" id="searchInput" autocomplete="off" aria-label="Buscar produtos">
                 <button class="search-btn" aria-label="Buscar"><i class="fas fa-arrow-right"></i></button>
             </div>
             <div class="header-actions">
-                <a href="conta.html" class="header-action-item" id="accountBtn"><i class="far fa-user"></i><div class="action-text"><span class="action-label">Olá, faça seu</span><strong>Login</strong></div></a>
-                <a href="#" class="header-action-item wishlist-action" id="wishlistBtn"><i class="far fa-heart"></i><span class="action-count" id="wishlistCount">0</span></a>
-                <a href="#" class="header-action-item cart-action" id="cartBtn"><i class="fas fa-shopping-bag"></i><span class="cart-badge" id="cartBadge">0</span><div class="action-text"><span class="action-label">Minha</span><strong>Sacola</strong></div></a>
+                <a href="conta.html" class="header-action-item" id="accountBtn">
+                    <i class="far fa-user"></i>
+                    <div class="action-text"><span class="action-label">Olá, faça seu</span><strong>Login</strong></div>
+                </a>
+                <a href="#" class="header-action-item wishlist-action" id="wishlistBtn" aria-label="Lista de desejos">
+                    <i class="far fa-heart"></i><span class="action-count" id="wishlistCount">0</span>
+                </a>
+                <a href="#" class="header-action-item cart-action" id="cartBtn" aria-label="Minha sacola">
+                    <i class="fas fa-shopping-bag"></i><span class="cart-badge" id="cartBadge">0</span>
+                    <div class="action-text"><span class="action-label">Minha</span><strong>Sacola</strong></div>
+                </a>
             </div>
         </div>
-        <nav class="main-nav" id="mainNav">
+        <nav class="main-nav" id="mainNav" aria-label="Navegação principal">
             <div class="container">
-                <ul class="nav-list">
+                <ul class="nav-list" role="list">
                     <li class="nav-item"><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
                     <li class="nav-item"><a href="todos-produtos.html">Todos os Tênis</a></li>
-                    <li class="nav-item highlight active"><a href="lancamentos.html"><span class="nav-pulse"></span>🔥 Lançamentos</a></li>
+                    <li class="nav-item highlight active"><a href="lancamentos.html"><span class="nav-pulse"></span><i class="fas fa-fire"></i> Lançamentos</a></li>
                     <li class="nav-item"><a href="camisas-selecao.html">Nike Air Max</a></li>
                     <li class="nav-item"><a href="modelo-jogador.html">Air Force 1</a></li>
                     <li class="nav-item"><a href="modelo-torcedor.html">Jordan</a></li>
@@ -68,59 +290,183 @@
             </div>
         </nav>
     </header>
+    <div class="mobile-overlay" id="mobileOverlay"></div>
 
-    <!-- PAGE HERO -->
-    <section class="page-hero page-hero-fire">
-        <div class="container">
-            <nav class="breadcrumb">
-                <a href="index.html">Início</a>
-                <i class="fas fa-chevron-right"></i>
-                <span>Lançamentos</span>
-            </nav>
-            <h1 class="page-title">🔥 Lançamentos</h1>
-            <p class="page-subtitle">As novidades mais quentes acabaram de chegar. Garanta a sua antes que esgote!</p>
-        </div>
-    </section>
-
-    <!-- PRODUCTS -->
-    <section class="catalog-section">
-        <div class="container">
-            <div class="catalog-toolbar">
-                <div class="catalog-count"><span>5</span> lançamentos disponíveis</div>
+    <main id="main-content">
+        <!-- HERO -->
+        <section class="lanc-hero" aria-labelledby="lanc-heading">
+            <div class="container lanc-hero-inner">
+                <nav class="breadcrumb" aria-label="Breadcrumb">
+                    <a href="index.html">Início</a>
+                    <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                    <span aria-current="page">Lançamentos</span>
+                </nav>
+                <div class="lanc-badge"><i class="fas fa-bolt"></i> Recém chegados</div>
+                <h1 class="lanc-title" id="lanc-heading">
+                    Novos<br><span>Lançamentos</span>
+                </h1>
+                <p class="lanc-subtitle">As novidades mais quentes acabaram de chegar. Tênis importados premium — garanta antes que esgotem.</p>
+                <div class="lanc-stats">
+                    <div class="lanc-stat"><strong>5</strong><span>Novidades</span></div>
+                    <div class="lanc-stat"><strong>2x</strong><span>Sem juros</span></div>
+                    <div class="lanc-stat"><strong>5%</strong><span>No PIX</span></div>
+                </div>
             </div>
+        </section>
 
-            <div class="products-grid catalog-grid" data-catalog="lancamentos">
-                <!-- Carregado dinamicamente por catalogo.js -->
+        <!-- STRIP -->
+        <div class="new-arrivals-strip" aria-hidden="true">
+            <div class="new-arrivals-track">
+                <span><i class="fas fa-circle"></i> NOVO</span>
+                <span><i class="fas fa-circle"></i> ACABOU DE CHEGAR</span>
+                <span><i class="fas fa-circle"></i> EDIÇÃO LIMITADA</span>
+                <span><i class="fas fa-circle"></i> FRETE GRÁTIS</span>
+                <span><i class="fas fa-circle"></i> NOVO</span>
+                <span><i class="fas fa-circle"></i> ACABOU DE CHEGAR</span>
+                <span><i class="fas fa-circle"></i> EDIÇÃO LIMITADA</span>
+                <span><i class="fas fa-circle"></i> FRETE GRÁTIS</span>
             </div>
         </div>
-    </section>
+
+        <!-- PRODUCTS -->
+        <section class="lanc-section">
+            <div class="container">
+                <!-- INFO BANNER -->
+                <div class="lanc-info-banner" role="complementary" aria-label="Informações de entrega">
+                    <div class="banner-left">
+                        <span class="banner-eyebrow">Novidades exclusivas</span>
+                        <span class="banner-title">Chegou agora</span>
+                        <span class="banner-sub">Parcele em 2x sem juros · 5% OFF no PIX</span>
+                    </div>
+                    <div class="banner-right">
+                        <div class="banner-perk"><i class="fas fa-truck"></i><span>Envio rápido</span></div>
+                        <div class="banner-perk"><i class="fas fa-undo-alt"></i><span>7 dias troca</span></div>
+                        <div class="banner-perk"><i class="fas fa-shield-alt"></i><span>Compra segura</span></div>
+                    </div>
+                </div>
+
+                <!-- FILTER BAR -->
+                <div class="lanc-filter-bar">
+                    <div class="lanc-filter-inner">
+                        <span class="lanc-filter-label"><i class="fas fa-sliders-h"></i> Filtrar:</span>
+                        <div class="filter-chips" role="group" aria-label="Filtros de categoria">
+                            <button class="filter-chip active" data-filter="all" aria-pressed="true">Todos</button>
+                            <button class="filter-chip" data-filter="nike" aria-pressed="false">Nike</button>
+                            <button class="filter-chip" data-filter="jordan" aria-pressed="false">Jordan</button>
+                            <button class="filter-chip" data-filter="asics" aria-pressed="false">Asics</button>
+                            <button class="filter-chip" data-filter="mizuno" aria-pressed="false">Mizuno</button>
+                        </div>
+                        <span class="lanc-count"><span id="lancCount">5</span> produtos</span>
+                    </div>
+                </div>
+
+                <!-- GRID -->
+                <div class="products-grid catalog-grid" id="lancamentosGrid" data-catalog="lancamentos" style="margin-top:28px;" role="list" aria-label="Produtos em lançamento">
+                    <!-- Carregado por catalogo.js -->
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- FOOTER -->
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <div class="container">
             <div class="footer-top">
                 <div class="footer-col footer-about">
-                    <a href="index.html" class="footer-logo"><img src="Logo CS - Rodapé.png" alt="Filho e Pai" class="logo-img footer-logo-img"></a>
+                    <a href="index.html" class="footer-logo" aria-label="Filho e Pai — página inicial">
+                        <img src="logo-rodape.png?v=20260601-logo" alt="Filho e Pai" class="logo-img footer-logo-img">
+                    </a>
                     <p>Tênis importados premium: Nike Air Max TN, Air Force 1, Jordan, Asics e Mizuno. Qualidade e conforto excepcionais para todo o Brasil.</p>
-                    <div class="footer-socials">
-                        <a href="https://www.instagram.com/filhoepai" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="https://wa.me/5511984270638" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                        <a href="https://www.tiktok.com/@filhoepai" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-                        <a href="https://www.youtube.com/@filhoepai" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    <div class="footer-socials" aria-label="Redes sociais">
+                        <a href="https://www.instagram.com/paiefilhoimportss" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/5511984270638" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://www.tiktok.com/@filhoepai" target="_blank" rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://www.youtube.com/@filhoepai" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
-                <div class="footer-col"><h4>Navegação</h4><ul><li><a href="index.html">Início</a></li><li><a href="todos-produtos.html">Todos os Tênis</a></li><li><a href="camisas-selecao.html">Nike Air Max</a></li><li><a href="modelo-jogador.html">Air Force 1</a></li><li><a href="modelo-torcedor.html">Jordan</a></li><li><a href="promocoes.html">Promoções</a></li></ul></div>
-                <div class="footer-col"><h4>Institucional</h4><ul><li><a href="sobre-nos.html">Sobre Nós</a></li><li><a href="politica-privacidade.html">Política de Privacidade</a></li><li><a href="termos-uso.html">Termos de Uso</a></li><li><a href="trocas-devolucoes.html">Trocas e Devoluções</a></li><li><a href="perguntas-frequentes.html">Perguntas Frequentes</a></li></ul></div>
-                <div class="footer-col"><h4>Atendimento</h4><ul class="contact-list"><li><a href="mailto:bruno.teles2@icloud.com"><i class="fas fa-envelope"></i> bruno.teles2@icloud.com</a></li><li><a href="https://wa.me/5511984270638"><i class="fab fa-whatsapp"></i> (11) 98427-0638</a></li><li><i class="fas fa-clock"></i> Seg a Sex: 9h às 18h</li></ul><h4 class="mt-20">Pagamento</h4><div class="payment-methods"><span class="payment-icon" title="Mastercard"><i class="fab fa-cc-mastercard"></i></span><span class="payment-icon" title="Visa"><i class="fab fa-cc-visa"></i></span><span class="payment-icon" title="PIX"><i class="fab fa-pix"></i></span><span class="payment-icon" title="Boleto"><i class="fas fa-barcode"></i></span></div></div>
+                <div class="footer-col">
+                    <h4>Navegação</h4>
+                    <ul>
+                        <li><a href="index.html">Início</a></li>
+                        <li><a href="todos-produtos.html">Todos os Tênis</a></li>
+                        <li><a href="lancamentos.html">Lançamentos</a></li>
+                        <li><a href="camisas-selecao.html">Nike Air Max</a></li>
+                        <li><a href="modelo-jogador.html">Air Force 1</a></li>
+                        <li><a href="modelo-torcedor.html">Jordan</a></li>
+                        <li><a href="promocoes.html">Promoções</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Institucional</h4>
+                    <ul>
+                        <li><a href="sobre-nos.html">Sobre Nós</a></li>
+                        <li><a href="guia-tamanhos.html">Guia de Tamanhos</a></li>
+                        <li><a href="rastreamento.html">Rastrear Pedido</a></li>
+                        <li><a href="politica-privacidade.html">Política de Privacidade</a></li>
+                        <li><a href="termos-uso.html">Termos de Uso</a></li>
+                        <li><a href="trocas-devolucoes.html">Trocas e Devoluções</a></li>
+                        <li><a href="perguntas-frequentes.html">Perguntas Frequentes</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Atendimento</h4>
+                    <ul class="contact-list">
+                        <li><a href="mailto:bruno.teles2@icloud.com"><i class="fas fa-envelope"></i> bruno.teles2@icloud.com</a></li>
+                        <li><a href="https://wa.me/5511984270638"><i class="fab fa-whatsapp"></i> (11) 98427-0638</a></li>
+                        <li><i class="fas fa-clock"></i> Seg a Sex: 9h às 18h</li>
+                    </ul>
+                    <h4 class="mt-20">Pagamento</h4>
+                    <div class="payment-methods" aria-label="Formas de pagamento">
+                        <span class="payment-icon" title="Mastercard"><i class="fab fa-cc-mastercard"></i></span>
+                        <span class="payment-icon" title="Visa"><i class="fab fa-cc-visa"></i></span>
+                        <span class="payment-icon" title="Amex"><i class="fab fa-cc-amex"></i></span>
+                        <span class="payment-icon" title="PIX"><i class="fab fa-pix"></i></span>
+                        <span class="payment-icon" title="Boleto"><i class="fas fa-barcode"></i></span>
+                        <span class="payment-icon" title="Elo"><i class="fas fa-credit-card"></i></span>
+                    </div>
+                    <h4 class="mt-20">Segurança</h4>
+                    <div class="security-badges">
+                        <span><i class="fas fa-lock"></i> SSL Seguro</span>
+                        <span><i class="fas fa-shield-alt"></i> Site Protegido</span>
+                    </div>
+                </div>
             </div>
-            <div class="footer-bottom"><p>&copy; 2026 Filho e Pai. Todos os direitos reservados.</p></div>
+            <div class="footer-trust-seals" role="list" aria-label="Selos de confiança">
+                <div class="trust-seal" role="listitem"><i class="fas fa-lock" aria-hidden="true"></i><span>Site<br>Seguro</span></div>
+                <div class="trust-seal" role="listitem"><i class="fas fa-shield-alt" aria-hidden="true"></i><span>Compra<br>Garantida</span></div>
+                <div class="trust-seal" role="listitem"><i class="fas fa-medal" aria-hidden="true"></i><span>Qualidade<br>1:1</span></div>
+                <div class="trust-seal" role="listitem"><i class="fas fa-undo" aria-hidden="true"></i><span>7 dias<br>Devolução</span></div>
+                <div class="trust-seal" role="listitem"><i class="fas fa-truck" aria-hidden="true"></i><span>Frete<br>Grátis*</span></div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Filho e Pai. Todos os direitos reservados.</p>
+                <a href="admin.html" class="admin-link" title="Painel Administrativo" aria-label="Painel Administrativo"><i class="fas fa-cog"></i></a>
+            </div>
         </div>
     </footer>
 
-    <a href="https://wa.me/5511984270638" class="whatsapp-float" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i><span class="wpp-tooltip">Precisa de ajuda?</span></a>
-    <button class="back-to-top" id="backToTop" aria-label="Voltar ao topo"><i class="fas fa-chevron-up"></i></button>
+    <a href="https://wa.me/5511984270638" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+        <span class="wpp-tooltip">Precisa de ajuda?</span>
+    </a>
+    <button class="back-to-top" id="backToTop" aria-label="Voltar ao topo">
+        <i class="fas fa-chevron-up"></i>
+    </button>
 
-    <script src="catalogo.js?v=20260210v7"></script>
-    <script src="script.js?v=20260210v7"></script>
+    <script src="catalogo.js?v=20260601v8"></script>
+    <script src="script.js?v=20260601v8"></script>
+    <script>
+        // Filter chips
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                document.querySelectorAll('.filter-chip').forEach(c => {
+                    c.classList.remove('active');
+                    c.setAttribute('aria-pressed', 'false');
+                });
+                this.classList.add('active');
+                this.setAttribute('aria-pressed', 'true');
+            });
+        });
+    </script>
 </body>
 </html>
