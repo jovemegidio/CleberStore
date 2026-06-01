@@ -1,5 +1,5 @@
-/* ========================================
-   B10 MANTOS - CHECKOUT JS (WhatsApp)
+﻿/* ========================================
+   Cleber Store - CHECKOUT JS (WhatsApp)
    Fluxo: Revisão → Cadastro → Endereço → WhatsApp
    ======================================== */
 document.addEventListener('DOMContentLoaded', () => {
@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let loggedCustomer = JSON.parse(localStorage.getItem('b10_loggedCustomer') || 'null');
 
     const COUPONS = {
-        'B10OFF10': { type: 'percent', value: 10, label: '10% OFF' },
-        'B10OFF15': { type: 'percent', value: 15, label: '15% OFF' },
+        'CLEBEROFF10': { type: 'percent', value: 10, label: '10% OFF' },
+        'CLEBEROFF15': { type: 'percent', value: 15, label: '15% OFF' },
         'FRETEGRATIS': { type: 'freeShipping', value: 0, label: 'Frete Grátis' },
         'PRIMEIRACOMPRA': { type: 'percent', value: 10, label: '10% primeira compra' }
     };
@@ -374,7 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const pixTotal = total * (1 - pixDiscount / 100);
 
         // Build WhatsApp message
-        let msg = `🛒 *PEDIDO B10 MANTOS*\n`;
+        let msg = `🛒 *PEDIDO Cleber Store*\n`;
         msg += `━━━━━━━━━━━━━━━━━━\n\n`;
 
         cartItems.forEach((item, i) => {
@@ -440,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Save order to localStorage for admin panel
-        const orderId = 'B10-' + String(Math.floor(Math.random() * 9000) + 1000);
+        const orderId = 'CS-' + String(Math.floor(Math.random() * 9000) + 1000);
         let orders = JSON.parse(localStorage.getItem('b10_orders') || '[]');
         const initials = name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
         cartItems.forEach(item => {

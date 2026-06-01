@@ -1,6 +1,6 @@
-{
-    "name": "B10 Mantos - A Elite das Camisas de Futebol",
-    "short_name": "B10 Mantos",
+﻿{
+    "name": "Cleber Store - A Elite das Camisas de Futebol",
+    "short_name": "Cleber Store",
     "description": "Camisas tailandesas 1:1 com qualidade premium. A melhor loja de camisas de futebol do Brasil.",
     "start_url": "/index.html",
     "display": "standalone",
@@ -9,10 +9,16 @@
     "orientation": "portrait-primary",
     "icons": [
         {
+            "src": "favicon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
             "src": "favicon.svg",
             "sizes": "any",
             "type": "image/svg+xml",
-            "purpose": "any maskable"
+            "purpose": "any"
         }
     ],
     "categories": ["shopping", "sports"],

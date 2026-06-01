@@ -1,5 +1,5 @@
-/* ========================================
-   B10 MANTOS - PRODUCT DETAIL PAGE JS
+﻿/* ========================================
+   Cleber Store - PRODUCT DETAIL PAGE JS
    ======================================== */
 document.addEventListener('DOMContentLoaded', () => {
     'use strict';
@@ -31,7 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 11, name: 'Tottenham Hotspur', category: 'Clubes Europeus', price: 159.80, originalPrice: 0, image: 'https://cdn.offstoreimages.me/compressed/56bae4931fa3c56494ee2702b5d12a82.webp', status: 'active', sales: 12 },
         { id: 12, name: 'Itália Seleção', category: 'Seleções', price: 159.80, originalPrice: 0, image: 'https://cdn.offstoreimages.me/compressed/7363172c8f5f13b9e54eb2ea61fac015.webp', status: 'active', sales: 29 },
         { id: 13, name: 'Portugal Seleção Away', category: 'Seleções', price: 159.80, originalPrice: 179.80, image: 'https://cdn.offstoreimages.me/compressed/29d9425563a0d980eb463532433ef026.webp', status: 'active', sales: 26 },
-        { id: 14, name: 'Itália Seleção Away', category: 'Seleções', price: 159.80, originalPrice: 0, image: 'https://cdn.offstoreimages.me/compressed/42a343b967f65bbd9f8d87769e2071d8.webp', status: 'active', sales: 21 }
+        { id: 14, name: 'Itália Seleção Away', category: 'Seleções', price: 159.80, originalPrice: 0, image: 'https://cdn.offstoreimages.me/compressed/42a343b967f65bbd9f8d87769e2071d8.webp', status: 'active', sales: 21 },
+        { id: 15, name: 'Nike Mercurial 2025', category: 'Tênis', price: 249.90, originalPrice: 299.90, image: 'https://images.unsplash.com/photo-1528701800489-20d9c8f02bae?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 35 },
+        { id: 16, name: 'Adidas Predator Pro', category: 'Tênis', price: 269.90, originalPrice: 329.90, image: 'https://images.unsplash.com/photo-1528701800484-1544cb97ef8e?auto=format&fit=crop&w=800&q=80', status: 'active', sales: 28 }
     ];
 
     const REVIEWS = JSON.parse(localStorage.getItem('b10_reviews')) || [
@@ -54,8 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let quantity = 1;
 
     // Fill page
-    document.title = `${product.name} | B10 Mantos`;
-    document.querySelector('meta[name="description"]')?.setAttribute('content', `${product.name} - Camisa tailandesa 1:1 premium. R$ ${product.price.toFixed(2).replace('.', ',')}. Compre na B10 Mantos.`);
+    document.title = `${product.name} | Cleber Store`;
+    const productType = product.category === 'Tênis' ? 'Tênis esportivo premium' : 'Camisa tailandesa 1:1 premium';
+    document.querySelector('meta[name="description"]')?.setAttribute('content', `${product.name} - ${productType}. R$ ${product.price.toFixed(2).replace('.', ',')}. Compre na Cleber Store.`);
 
     const fmt = (v) => `R$ ${v.toFixed(2).replace('.', ',')}`;
     const pdpName = document.getElementById('pdpName');

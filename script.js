@@ -1,5 +1,5 @@
-/* ========================================
-   B10 MANTOS - ADVANCED JAVASCRIPT
+﻿/* ========================================
+   Cleber Store - ADVANCED JAVASCRIPT
    Professional UX & Interactions
    ======================================== */
 
@@ -18,8 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const storeConfig = {
         whatsapp: siteSettings.store?.whatsapp || '5511954555972',
-        instagram: siteSettings.store?.instagram || '@b10mantos',
-        name: siteSettings.store?.name || 'B10 Mantos',
+        instagram: siteSettings.store?.instagram || '@cleberstore',
+        name: siteSettings.store?.name || 'Cleber Store',
         email: siteSettings.store?.email || 'bruno.teles2@icloud.com'
     };
 
@@ -408,8 +408,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let appliedCoupon = null;
 
         const COUPONS = {
-            'B10OFF10': { type: 'percent', value: 10, label: 'B10OFF10 (-10%)' },
-            'B10OFF15': { type: 'percent', value: 15, label: 'B10OFF15 (-15%)' },
+            'CLEBEROFF10': { type: 'percent', value: 10, label: 'CLEBEROFF10 (-10%)' },
+            'CLEBEROFF15': { type: 'percent', value: 15, label: 'CLEBEROFF15 (-15%)' },
             'FRETEGRATIS': { type: 'freeShipping', value: 0, label: 'FRETEGRATIS (Frete Grátis)' },
             'PRIMEIRACOMPRA': { type: 'percent', value: 10, label: 'PRIMEIRACOMPRA (-10%)' }
         };
@@ -597,7 +597,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const total = subtotal - discount;
             const pixTotal = total * (1 - shippingConfig.pixDiscount / 100);
 
-            let msg = `🛒 *PEDIDO B10 MANTOS*\n`;
+            let msg = `🛒 *PEDIDO Cleber Store*\n`;
             msg += `━━━━━━━━━━━━━━━━━━\n\n`;
             items.forEach((item, i) => {
                 const unitVal = typeof item.price === 'number' ? item.price : parseFloat(String(item.price).replace('R$','').replace(/\./g,'').replace(',','.').trim()) || 0;
@@ -738,7 +738,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const input = form.querySelector('input[type="email"]');
             if (input?.value) {
-                toast.show('Cadastro realizado! 🎉', 'Use o código B10OFF10 para 10% de desconto');
+                toast.show('Cadastro realizado! 🎉', 'Use o código CLEBEROFF10 para 10% de desconto');
                 input.value = '';
             }
         });
@@ -956,5 +956,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    console.log('🏆 B10 Mantos - Site carregado com sucesso!');
+    console.log('🏆 Cleber Store - Site carregado com sucesso!');
 });
