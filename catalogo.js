@@ -97,7 +97,10 @@
         { id: 82, name: "Adidas ADI2000", category: "Adidas", price: 190.00, originalPrice: 0.00, image: "Produtos/ADI2000/1.jpg", images: ["Produtos/ADI2000/1.jpg", "Produtos/ADI2000/2.jpg", "Produtos/ADI2000/3.jpg", "Produtos/ADI2000/4.jpg", "Produtos/ADI2000/5.jpg", "Produtos/ADI2000/6.jpg", "Produtos/ADI2000/7.jpg", "Produtos/ADI2000/8.jpg"], status: "active", sales: 8 },
         { id: 83, name: "Mizuno Pro 8", category: "Asics & Mizuno", price: 330.00, originalPrice: 0.00, image: "Produtos/PRO8/1.jpg", images: ["Produtos/PRO8/1.jpg", "Produtos/PRO8/2.jpg", "Produtos/PRO8/3.jpg", "Produtos/PRO8/4.jpg"], status: "active", sales: 7 },
         { id: 84, name: "Mizuno Pro 7", category: "Asics & Mizuno", price: 360.00, originalPrice: 0.00, image: "Produtos/PRO%207/4.jpg", status: "active", sales: 6 },
-        { id: 85, name: "Mizuno Pro 6", category: "Asics & Mizuno", price: 360.00, originalPrice: 0.00, image: "Produtos/PRO6/1.jpg", status: "active", sales: 5 }
+        { id: 85, name: "Mizuno Pro 6", category: "Asics & Mizuno", price: 360.00, originalPrice: 0.00, image: "Produtos/PRO6/1.jpg", status: "active", sales: 5 },
+        { id: 86, name: "Louis Vuitton LV Skate Sneaker", category: "Luxo", price: 240.00, originalPrice: 0.00, image: "Produtos/Louis%20Vuitton%20LV%20Skate%20Sneaker/1.jpg", images: ["Produtos/Louis%20Vuitton%20LV%20Skate%20Sneaker/1.jpg", "Produtos/Louis%20Vuitton%20LV%20Skate%20Sneaker/2.jpg", "Produtos/Louis%20Vuitton%20LV%20Skate%20Sneaker/3.jpg", "Produtos/Louis%20Vuitton%20LV%20Skate%20Sneaker/4.jpg", "Produtos/Louis%20Vuitton%20LV%20Skate%20Sneaker/5.jpg"], status: "active", sales: 4 },
+        { id: 87, name: "Nike Court Borough Mid 2", category: "Tênis Nike", price: 180.00, originalPrice: 0.00, image: "Produtos/Nike%20Court%20Borough%20Mid%202/1.jpg", images: ["Produtos/Nike%20Court%20Borough%20Mid%202/1.jpg", "Produtos/Nike%20Court%20Borough%20Mid%202/2.jpg", "Produtos/Nike%20Court%20Borough%20Mid%202/3.jpg", "Produtos/Nike%20Court%20Borough%20Mid%202/4.jpg"], status: "active", sales: 3 },
+        { id: 88, name: "Air Jordan 1 High", category: "Jordan", price: 180.00, originalPrice: 0.00, image: "Produtos/Air%20Jordan%201%20High/1.jpg", images: ["Produtos/Air%20Jordan%201%20High/1.jpg", "Produtos/Air%20Jordan%201%20High/2.jpg"], status: "active", sales: 2 }
     ];
 
     const DEFAULT_REVIEWS = [
@@ -229,6 +232,7 @@
     function getCategoryFilter(cat) {
         if (!cat) return 'nike';
         const lower = normalizeText(cat);
+        if (lower.includes('luxo') || lower.includes('louis vuitton') || lower.includes('lv')) return 'luxo';
         if (lower.includes('adidas')) return 'adidas';
         if (lower.includes('jordan')) return 'jordan';
         if (lower.includes('air force')) return 'airforce';
@@ -242,6 +246,7 @@
     function getCategoryLabel(cat) {
         if (!cat) return 'Tênis Nike';
         const lower = cat.toLowerCase();
+        if (lower.includes('luxo') || lower.includes('louis vuitton')) return 'Luxo';
         if (lower.includes('adidas')) return 'Adidas';
         if (lower.includes('jordan')) return 'Jordan';
         if (lower.includes('air force')) return 'Air Force 1';
@@ -314,7 +319,7 @@
                     <div class="product-prices">
                         ${priceHTML}
                     </div>
-                    <span class="product-installment">2x sem juros · até 5x c/ taxa</span>
+                    <span class="product-installment">até 5x c/ taxa da máquina</span>
                     ${isSoldOut
                         ? `<span class="btn-add-cart btn-soldout" style="pointer-events:none;opacity:0.6;background:#94a3b8"><i class="fas fa-ban"></i> Esgotado</span>`
                         : `<a href="produto.html?id=${product.id}" class="btn-add-cart"><i class="fas fa-eye"></i> Ver Produto</a>`}
@@ -365,7 +370,7 @@
                         <div class="product-rating"><div class="stars">${getStarsHTML(4.5)}</div><span class="rating-count">(${product.sales || 0})</span></div>
                         <div class="product-prices">${priceHTML}</div>
                         <div class="product-payment-info">
-                            <span class="product-installment"><i class="far fa-credit-card"></i> 2x sem juros · até 5x c/ taxa</span>
+                            <span class="product-installment"><i class="far fa-credit-card"></i> até 5x c/ taxa da máquina</span>
                             <span class="product-pix"><i class="fab fa-pix"></i> ${calcPix(product.price)} <em>no PIX (${pixDiscount}% OFF)</em></span>
                         </div>
                         ${isSoldOut
